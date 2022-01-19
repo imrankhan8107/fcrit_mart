@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -18,8 +17,14 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              Expanded(child: Container()),
-              Expanded(child: Container()),
+              Expanded(
+                  child: Container(
+                child: Text('home'),
+              )),
+              Expanded(
+                  child: Container(
+                child: Text('home2'),
+              )),
             ],
           )
         ],
