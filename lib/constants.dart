@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const kScaffoldbackgroundcolor = Color(0xFF101010);
 
 const kAppBarTheme = AppBarTheme(
-  toolbarHeight: 80,
+  toolbarHeight: 75,
   titleTextStyle: kAppbartitle,
   color: Color(0xFF101010),
 );

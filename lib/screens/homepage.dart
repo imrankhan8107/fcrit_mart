@@ -1,3 +1,4 @@
+import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,14 +18,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              Expanded(
-                  child: Container(
-                child: Text('home'),
-              )),
-              Expanded(
-                  child: Container(
-                child: Text('home2'),
-              )),
+              Text('home'),
+              Text('home2'),
             ],
           )
         ],

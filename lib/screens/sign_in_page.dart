@@ -30,15 +30,15 @@ class _SignInState extends State<SignIn> {
                   style: kTextstyle,
                 ),
                 Row(
-                  children: const [
+                  children: [
                     SigninOptions(icon: Icons.g_mobiledata_outlined),
                     SigninOptions(icon: Icons.g_mobiledata),
                   ],
                 ),
               ],
             ),
-            const Credential(credentialname: 'E-mail'),
-            const Credential(credentialname: 'Password'),
+            Credential(credentialname: 'E-mail'),
+            Credential(credentialname: 'Password'),
             BottomButton(
               buttontext: 'Log-in',
               text: 'Don\'t have an account?',

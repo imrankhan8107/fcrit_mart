@@ -1,4 +1,5 @@
 import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:fcrit_mart/screens/sign_in_page.dart';
 import 'package:fcrit_mart/screens/sign_up_page.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class Fcritmart extends StatelessWidget {
       routes: {
         '/signin': (context) => SignIn(),
         '/signup': (context) => SignUp(),
+        '/homepage': (context) => HomePage(),
       },
       initialRoute: '/signin',
       debugShowCheckedModeBanner: false,

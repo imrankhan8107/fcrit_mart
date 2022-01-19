@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Credential extends StatelessWidget {
   final String credentialname;
-  const Credential({required this.credentialname});
+  Credential({required this.credentialname});
 
   @override
   Widget build(BuildContext context) {

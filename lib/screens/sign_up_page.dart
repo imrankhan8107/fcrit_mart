@@ -35,16 +35,16 @@ class _SignUpState extends State<SignUp> {
                   style: kTextstyle,
                 ),
                 Row(
-                  children: const [
+                  children: [
                     SigninOptions(icon: Icons.g_mobiledata_outlined),
                     SigninOptions(icon: Icons.g_mobiledata),
                   ],
                 ),
               ],
             ),
-            const Credential(credentialname: 'Name'),
-            const Credential(credentialname: 'E-mail'),
-            const Credential(credentialname: 'Password'),
+            Credential(credentialname: 'Name'),
+            Credential(credentialname: 'E-mail'),
+            Credential(credentialname: 'Password'),
             BottomButton(
               buttontext: 'Sign-up',
               text: 'Already have an account?',
