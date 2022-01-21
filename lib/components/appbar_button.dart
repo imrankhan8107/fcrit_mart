@@ -2,6 +2,8 @@ import 'package:fcrit_mart/constants.dart';
 import 'package:flutter/material.dart';
 
 class Appbarbutton extends StatelessWidget {
+  const Appbarbutton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

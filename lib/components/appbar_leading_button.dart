@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Appbarbutton extends StatefulWidget {
+  const Appbarbutton({Key? key}) : super(key: key);
+
   @override
   _AppbarbuttonState createState() => _AppbarbuttonState();
 }
@@ -11,13 +13,13 @@ class _AppbarbuttonState extends State<Appbarbutton> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        foregroundDecoration: BoxDecoration(),
-        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        foregroundDecoration: const BoxDecoration(),
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(Icons.arrow_back_ios_rounded),
+        child: const Icon(Icons.arrow_back_ios_rounded),
       ),
     );
   }

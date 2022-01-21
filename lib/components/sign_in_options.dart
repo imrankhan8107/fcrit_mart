@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SigninOptions extends StatelessWidget {
   final IconData icon;
-  SigninOptions({required this.icon});
+  const SigninOptions({Key? key, required this.icon}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Expanded(
