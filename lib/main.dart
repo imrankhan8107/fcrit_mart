@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(Fcritmart());
+  runApp(const Fcritmart());
 }
 
 class Fcritmart extends StatelessWidget {
