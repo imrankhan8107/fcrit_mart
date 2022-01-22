@@ -1,4 +1,5 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/constants.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         leading: Appbarbutton(
           ontapAppbar: () {

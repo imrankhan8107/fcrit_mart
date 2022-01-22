@@ -1,6 +1,7 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/flutterfire.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fcrit_mart/components/sign_in_options.dart';
 import 'package:fcrit_mart/components/bottom_button.dart';
@@ -31,7 +32,7 @@ class _SignInState extends State<SignIn> {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,9 +74,9 @@ class _SignInState extends State<SignIn> {
             ),
             BottomButton(
               ontapbutton: () async {
-                bool shouldnavigate =
+                String shouldnavigate =
                     await signIn(_emailField.text, _passwordField.text);
-                if (shouldnavigate) {
+                if (shouldnavigate == 'Yes') {
                   Navigator.pushNamed(context, '/homepage');
                 }
               },
@@ -86,6 +87,13 @@ class _SignInState extends State<SignIn> {
                 Navigator.pushNamed(context, '/signup');
               },
             ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signInAnonymously();
+                Navigator.pushNamed(context, '/homepage');
+              },
+              child: const Text('Sign in Anounymously'),
+            )
           ],
         ),
       ),

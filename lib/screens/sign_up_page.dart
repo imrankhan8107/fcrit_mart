@@ -32,7 +32,7 @@ class _SignUpState extends State<SignUp> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
@@ -66,6 +66,9 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             TextFormField(
+              validator: (String? value) {
+                return (value == null) ? 'Please enter a password' : null;
+              },
               controller: _passwordField,
               obscureText: true,
               decoration: const InputDecoration(
@@ -79,9 +82,9 @@ class _SignUpState extends State<SignUp> {
             ),
             BottomButton(
               ontapbutton: () async {
-                bool shouldnavigate =
+                String shouldnavigate =
                     await signUp(_emailField.text, _passwordField.text);
-                if (shouldnavigate) {
+                if (shouldnavigate == 'Yes') {
                   Navigator.pushNamed(context, '/homepage');
                 }
               },

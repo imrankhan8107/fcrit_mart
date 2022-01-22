@@ -1,12 +1,21 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/constants.dart';
 import 'package:flutter/material.dart';
 
-class Sellerpage extends StatelessWidget {
+class Sellerpage extends StatefulWidget {
   const Sellerpage({Key? key}) : super(key: key);
+
+  @override
+  State<Sellerpage> createState() => _SellerpageState();
+}
+
+class _SellerpageState extends State<Sellerpage> {
+  int itemno = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         leading: Appbarbutton(
           ontapAppbar: () {
@@ -16,9 +25,13 @@ class Sellerpage extends StatelessWidget {
         title: const Text('Hello Seller'),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        onTap: (int value) {
+          setState(() {
+            itemno = value;
+          });
+        },
+        currentIndex: itemno,
         selectedItemColor: Colors.orange,
-        enableFeedback: true,
-        // TODO: Set selected tab bar
         // 6
         items: const [
           BottomNavigationBarItem(
