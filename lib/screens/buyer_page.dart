@@ -8,7 +8,11 @@ class Buyerpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Appbarbutton(),
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Hello Buyer'),
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -14,7 +14,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Appbarbutton(),
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           Card(
             margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -47,8 +51,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: const Center(
         child: Text(
-          'Welcome to FCRIT MART',
-          style: TextStyle(fontSize: 100),
+          'Welcome to \nFCRIT MART',
+          style: TextStyle(
+            fontSize: 80,
+            fontFamily: 'Lobster',
+            color: Colors.cyan,
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/flutterfire.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,18 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  TextEditingController _emailField = TextEditingController();
-  TextEditingController _passwordField = TextEditingController();
+  final TextEditingController _emailField = TextEditingController();
+  final TextEditingController _passwordField = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text('Log in'),
       ),
       body: Padding(
