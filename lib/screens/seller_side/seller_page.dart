@@ -1,7 +1,9 @@
 import 'dart:typed_data';
+
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,13 +16,12 @@ class Sellerpage extends StatefulWidget {
 
 class _SellerpageState extends State<Sellerpage> {
   Uint8List? _image;
+  int _selectedIndex = 0;
+  TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
-    static const TextStyle optionStyle =
-    TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-    static final List<Widget> _widgetOptions = <Widget>[
+    final List<Widget> _widgetOptions = <Widget>[
       Column(
         children: const [
           ListTile(
@@ -39,20 +40,53 @@ class _SellerpageState extends State<Sellerpage> {
       ),
       Column(
         children: [
-          ElevatedButton(
-            onPressed: () async {
-              Uint8List img = await pickimage(ImageSource.gallery);
-              setState(() {
-                _image = img;
-              });
-            },
-            child: Row(
-              children: const [
-                Icon(Icons.add_a_photo),
-                Text('Add Image'),
-              ],
-            ),
-          ),
+          _image != null
+              ? GestureDetector(
+                  onTap: () async {
+                    Uint8List img = await pickimage(ImageSource.gallery);
+                    setState(() {
+                      _image = img;
+                    });
+                  },
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: MemoryImage(_image!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.add_a_photo),
+                        Text('Add Image'),
+                      ],
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () async {
+                    Uint8List img = await pickimage(ImageSource.gallery);
+                    setState(() {
+                      _image = img;
+                    });
+                  },
+                  child: Container(
+                    height: 200,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('images/bluebackground.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.add_a_photo),
+                        Text('Add Image'),
+                      ],
+                    ),
+                  ),
+                ),
           const TextField(
             decoration: InputDecoration(
               hintText: 'Description',
@@ -62,7 +96,7 @@ class _SellerpageState extends State<Sellerpage> {
           ),
         ],
       ),
-      const Text(
+      Text(
         'Index 2: Settings',
         style: optionStyle,
       ),
