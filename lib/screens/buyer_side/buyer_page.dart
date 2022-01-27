@@ -10,11 +10,52 @@ class Buyerpage extends StatefulWidget {
 }
 
 class _BuyerpageState extends State<Buyerpage> {
-  int itemno = 0;
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static final List<Widget> _widgetOptions = <Widget>[
+    Column(
+      children: [
+        Container(
+          child: ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Item 1'),
+          ),
+        ),
+        Container(
+          child: ListTile(
+            leading: Icon(Icons.search),
+            title: Text('Item 1'),
+          ),
+        ),
+        Container(
+          child: ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Item 1'),
+          ),
+        ),
+      ],
+    ),
+    Text(
+      'Index 1: Search',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: Settings',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: _widgetOptions.elementAt(_selectedIndex),
       drawer: const AppDrawer(),
       appBar: AppBar(
         leading: Appbarbutton(
@@ -25,16 +66,9 @@ class _BuyerpageState extends State<Buyerpage> {
         title: const Text('Hello Buyer'),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: itemno,
-        onTap: (int value) {
-          setState(() {
-            itemno = value;
-          });
-        },
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         selectedItemColor: Colors.orange,
-        enableFeedback: true,
-        // TODO: Set selected tab bar
-        // 6
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

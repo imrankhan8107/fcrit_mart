@@ -7,13 +7,13 @@ class BottomButton extends StatelessWidget {
       required this.buttontext,
       required this.text,
       required this.textinbutton,
-      required this.onpress,
+      required this.ontextpress,
       required this.ontapbutton})
       : super(key: key);
   final String buttontext;
   final String text;
   final String textinbutton;
-  final void Function() onpress;
+  final void Function() ontextpress;
   final void Function() ontapbutton;
 
   @override
@@ -33,9 +33,8 @@ class BottomButton extends StatelessWidget {
                 style: kBottomButtonStyle,
               ),
             ),
-            margin: const EdgeInsets.all(10),
             width: double.infinity,
-            height: 80,
+            height: 60,
           ),
         ),
         Row(
@@ -46,7 +45,7 @@ class BottomButton extends StatelessWidget {
               style: kTextstyle,
             ),
             TextButton(
-              onPressed: onpress,
+              onPressed: ontextpress,
               child: Text(textinbutton),
             )
           ],

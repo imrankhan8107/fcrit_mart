@@ -1,10 +1,9 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
-import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/components/bottom_button.dart';
+import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/flutterfire.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fcrit_mart/components/sign_in_options.dart';
-import 'package:fcrit_mart/components/bottom_button.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -16,6 +15,15 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final TextEditingController _emailField = TextEditingController();
   final TextEditingController _passwordField = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _emailField.dispose();
+    _passwordField.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,48 +37,37 @@ class _SignInState extends State<SignIn> {
         title: const Text('Log in'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Log in with one of the following options.',
-                  style: kTextstyle,
-                ),
-                Row(
-                  children: const [
-                    SigninOptions(icon: Icons.g_mobiledata_outlined),
-                    SigninOptions(icon: Icons.g_mobiledata),
-                  ],
-                ),
-              ],
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     const Text(
+            //       'Log in with one of the following options.',
+            //       style: kTextstyle,
+            //     ),
+            //     Row(
+            //       children: const [
+            //         SigninOptions(icon: Icons.g_mobiledata_outlined),
+            //         SigninOptions(icon: Icons.g_mobiledata),
+            //       ],
+            //     ),
+            //   ],
+            // ),
+            Image.asset('images/fcritlogo.png'),
+            Textfieldinput(
+              textEditingController: _emailField,
+              hinttext: 'Enter your Email',
+              textInputType: TextInputType.emailAddress,
             ),
-            TextFormField(
-              controller: _emailField,
-              decoration: const InputDecoration(
-                hintText: 'something@gmail.com',
-                hintStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                labelText: 'E-mail',
-                labelStyle: TextStyle(color: Colors.white),
-              ),
-            ),
-            TextFormField(
-              controller: _passwordField,
-              obscureText: true,
-              decoration: const InputDecoration(
-                hintText: 'password',
-                hintStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                labelText: 'Password',
-                labelStyle: TextStyle(color: Colors.white),
-              ),
+            Textfieldinput(
+              textEditingController: _passwordField,
+              hinttext: 'Enter your Password',
+              textInputType: TextInputType.text,
+              ispass: true,
             ),
             BottomButton(
               ontapbutton: () async {
@@ -83,7 +80,7 @@ class _SignInState extends State<SignIn> {
               buttontext: 'Log-in',
               text: 'Don\'t have an account?',
               textinbutton: 'Sign-up',
-              onpress: () {
+              ontextpress: () {
                 Navigator.pushNamed(context, '/signup');
               },
             ),
