@@ -4,7 +4,6 @@ import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/flutterfire.dart';
 import 'package:fcrit_mart/screens/seller_side/my_products.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
