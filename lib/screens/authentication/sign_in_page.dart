@@ -37,7 +37,7 @@ class _SignInState extends State<SignIn> {
         title: const Text('Log in'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,6 +58,9 @@ class _SignInState extends State<SignIn> {
             //   ],
             // ),
             Image.asset('images/fcritlogo.png'),
+            const SizedBox(
+              height: 10,
+            ),
             Textfieldinput(
               textEditingController: _emailField,
               hinttext: 'Enter your Email',

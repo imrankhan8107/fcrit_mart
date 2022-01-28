@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/flutterfire.dart';
+import 'package:fcrit_mart/screens/seller_side/my_products.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,29 +18,37 @@ class Sellerpage extends StatefulWidget {
 class _SellerpageState extends State<Sellerpage> {
   Uint8List? _image;
   int _selectedIndex = 0;
-  TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle optionStyle =
+      const TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  final TextEditingController _productname = TextEditingController();
+  final TextEditingController _description = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
+      const Myproducts(),
       Column(
-        children: const [
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Item 1'),
-          ),
-          ListTile(
-            leading: Icon(Icons.search),
-            title: Text('Item 1'),
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Item 1'),
-          ),
-        ],
-      ),
-      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 30,
+            ),
+            child: TextField(
+              maxLines: 1,
+              controller: _productname,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: Divider.createBorderSide(context),
+                ),
+                hintText: 'Product Name',
+                filled: true,
+                contentPadding: const EdgeInsets.all(15),
+              ),
+            ),
+          ),
           _image != null
               ? GestureDetector(
                   onTap: () async {
@@ -48,19 +57,25 @@ class _SellerpageState extends State<Sellerpage> {
                       _image = img;
                     });
                   },
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: MemoryImage(_image!),
-                        fit: BoxFit.cover,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
                     ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.add_a_photo),
-                        Text('Add Image'),
-                      ],
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: MemoryImage(_image!),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.add_a_photo),
+                          Text('Add Image'),
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -71,34 +86,81 @@ class _SellerpageState extends State<Sellerpage> {
                       _image = img;
                     });
                   },
-                  child: Container(
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('images/bluebackground.jpg'),
-                        fit: BoxFit.cover,
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
                     ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.add_a_photo),
-                        Text('Add Image'),
-                      ],
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 5,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('images/bluebackground.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.add_a_photo),
+                          Text('Add Image'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-          const TextField(
-            decoration: InputDecoration(
-              hintText: 'Description',
-              filled: true,
-              contentPadding: EdgeInsets.all(15),
+          const SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 30,
+            ),
+            child: TextField(
+              maxLines: 5,
+              controller: _description,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: Divider.createBorderSide(context),
+                ),
+                hintText: 'Description',
+                filled: true,
+                contentPadding: EdgeInsets.all(15),
+              ),
             ),
           ),
+          const SizedBox(
+            height: 30,
+          ),
+          GestureDetector(
+            onTap: () async {
+              try {
+                String photoUrl = await StorageMethods()
+                    .uploadimgtofirebase('productImages', _image!, false);
+                String imgres = await Authmethods().addImage(
+                    file: photoUrl,
+                    productName: _productname.text,
+                    description: _description.text);
+                print(imgres);
+                print(photoUrl);
+              } catch (e) {
+                print(e.toString());
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30,
+              ),
+              child: Container(
+                child: const Center(child: Text('Upload')),
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  gradient: kGradientcolor,
+                ),
+              ),
+            ),
+          )
         ],
-      ),
-      Text(
-        'Index 2: Settings',
-        style: optionStyle,
       ),
     ];
 
@@ -109,15 +171,8 @@ class _SellerpageState extends State<Sellerpage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        leading: Appbarbutton(
-          ontapAppbar: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text('Hello Seller'),
-      ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _onItemTapped,
@@ -132,10 +187,6 @@ class _SellerpageState extends State<Sellerpage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle),
             label: 'Add',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
           ),
         ],
       ),

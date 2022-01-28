@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Future<String> signIn(String email, String password) async {
   try {
@@ -34,13 +35,39 @@ class Authmethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<String> addImage({
+    required String file,
+    required String productName,
+    required String description,
+  }) async {
+    String res = 'some error occured';
+    try {
+      if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser?.uid)
+            .collection('products')
+            .doc()
+            .set({
+          'Name': productName,
+          'file': file,
+          'description': description,
+        });
+        res = 'success';
+      }
+      return res;
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
   //signup the user
   Future<String> signUpUser({
     required String email,
     required String password,
     required String name,
     required String mobileno,
-    // required Uint8List file,
   }) async {
     String res = 'some error occured';
     try {
@@ -75,10 +102,36 @@ class Authmethods {
         //   'mobileNo': mobileno,
         // });
         res = 'success';
+      } else {
+        res = "Fields cannot be empty";
       }
-    } catch (e) {
-      res = e.toString();
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "invalid-email":
+          res = "Your email address appears to be malformed.";
+          break;
+        case "wrong-password":
+          res = "Your password is wrong.";
+          break;
+        case "user-not-found":
+          res = "User with this email doesn't exist.";
+          break;
+        case "user-disabled":
+          res = "User with this email has been disabled.";
+          break;
+        case "too-many-requests":
+          res = "Too many requests";
+          break;
+        case "operation-not-allowed":
+          res = "Signing in with Email and Password is not enabled.";
+          break;
+        default:
+          res = "An undefined Error happened.";
+      }
+      Fluttertoast.showToast(msg: res);
+      print(e.code);
     }
+    Fluttertoast.showToast(msg: res);
     return res;
   }
 }
