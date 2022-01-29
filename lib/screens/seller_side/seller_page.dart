@@ -53,7 +53,7 @@ class _SellerpageState extends State<Sellerpage> {
           _image != null
               ? GestureDetector(
                   onTap: () async {
-                    Uint8List img = await pickimage(ImageSource.gallery);
+                    Uint8List img = await pickimage(ImageSource.camera);
                     setState(() {
                       _image = img;
                     });
@@ -126,7 +126,7 @@ class _SellerpageState extends State<Sellerpage> {
                 ),
                 hintText: 'Description',
                 filled: true,
-                contentPadding: EdgeInsets.all(15),
+                contentPadding: const EdgeInsets.all(15),
               ),
             ),
           ),
@@ -149,6 +149,7 @@ class _SellerpageState extends State<Sellerpage> {
                   Fluttertoast.showToast(msg: 'Please Sign in First');
                 }
               } catch (e) {
+                Fluttertoast.showToast(msg: e.toString());
                 print(e.toString());
               }
             },

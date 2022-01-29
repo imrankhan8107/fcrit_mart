@@ -11,7 +11,7 @@ class Myproducts extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Seller page',
             style: TextStyle(fontSize: 18),
           ),

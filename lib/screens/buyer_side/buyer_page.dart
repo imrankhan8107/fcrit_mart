@@ -11,8 +11,6 @@ class Buyerpage extends StatefulWidget {
 
 class _BuyerpageState extends State<Buyerpage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const BuyersideHomepage(),
     const Center(
