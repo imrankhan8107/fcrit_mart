@@ -17,7 +17,6 @@ pickimage(ImageSource source) async {
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   //adding image to firebase storage
   Future<String> uploadimgtofirebase(
       String childname, Uint8List file, bool ispost) async {
@@ -26,8 +25,8 @@ class StorageMethods {
       Reference ref =
           _storage.ref().child(childname).child(_auth.currentUser!.uid);
 
-      // UploadTask uploadTask = ref.putFile(file);
-      TaskSnapshot snap = await ref.putData(file);
+      UploadTask uploadTask = ref.putData(file);
+      TaskSnapshot snap = await uploadTask;
       String downloadurl = await snap.ref.getDownloadURL();
       res = 'success';
       print('res: $res');
@@ -36,7 +35,8 @@ class StorageMethods {
     } catch (e) {
       print(e.toString());
       res = 'error occurred while upload';
+      print('res:$res');
     }
-    return res;
+    return 'https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg';
   }
 }

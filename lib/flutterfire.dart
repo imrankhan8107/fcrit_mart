@@ -47,7 +47,7 @@ class Authmethods {
             .collection('users')
             .doc(_auth.currentUser?.uid)
             .collection('products')
-            .doc()
+            .doc(_auth.currentUser?.uid)
             .set({
           'Name': productName,
           'file': file,

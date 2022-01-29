@@ -4,7 +4,9 @@ import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/flutterfire.dart';
 import 'package:fcrit_mart/screens/seller_side/my_products.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Sellerpage extends StatefulWidget {
@@ -134,14 +136,18 @@ class _SellerpageState extends State<Sellerpage> {
           GestureDetector(
             onTap: () async {
               try {
-                String photoUrl = await StorageMethods()
-                    .uploadimgtofirebase('productImages', _image!, false);
-                String imgres = await Authmethods().addImage(
-                    file: photoUrl,
-                    productName: _productname.text,
-                    description: _description.text);
-                print(imgres);
-                print(photoUrl);
+                if (FirebaseAuth.instance.currentUser?.isAnonymous != true) {
+                  String photoUrl = await StorageMethods()
+                      .uploadimgtofirebase('productImages', _image!, false);
+                  String imgres = await Authmethods().addImage(
+                      file: photoUrl,
+                      productName: _productname.text,
+                      description: _description.text);
+                  print(imgres);
+                  print(photoUrl);
+                } else {
+                  Fluttertoast.showToast(msg: 'Please Sign in First');
+                }
               } catch (e) {
                 print(e.toString());
               }
