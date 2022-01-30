@@ -110,7 +110,7 @@ class _SellerpageState extends State<Sellerpage> {
                   ),
                 ),
           const SizedBox(
-            height: 30,
+            height: 15,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(

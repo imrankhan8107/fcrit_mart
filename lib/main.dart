@@ -1,4 +1,5 @@
 import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/screens/authentication/forgot_password_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
 import 'package:fcrit_mart/screens/buyer_side/buyer_page.dart';
@@ -25,6 +26,7 @@ class Fcritmart extends StatelessWidget {
         '/homepage': (context) => const HomePage(),
         '/buyerpage': (context) => const Buyerpage(),
         '/sellerpage': (context) => const Sellerpage(),
+        '/forgotpass': (context) => const ForgotPass(),
       },
       initialRoute: '/signup',
       debugShowCheckedModeBanner: false,

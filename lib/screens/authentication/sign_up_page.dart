@@ -91,13 +91,17 @@ class _SignUpState extends State<SignUp> {
             BottomButton(
               ontapbutton: () async {
                 String res = await Authmethods().signUpUser(
-                  mobileno: _mobilenumber.text,
+                  mobileno:
+                      int.parse(_mobilenumber.text, onError: (String value) {
+                    value = '';
+                    return 0;
+                  }),
                   password: _passwordField.text,
                   name: _name.text,
                   email: _emailField.text,
                 );
                 print(res);
-                if (res == 'success') {
+                if (res == 'Sign up Successful') {
                   Navigator.pushNamed(context, '/homepage');
                 }
               },

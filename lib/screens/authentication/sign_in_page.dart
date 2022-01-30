@@ -2,7 +2,6 @@ import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/bottom_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/flutterfire.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -84,15 +83,15 @@ class _SignInState extends State<SignIn> {
               text: 'Don\'t have an account?',
               textinbutton: 'Sign-up',
               ontextpress: () {
-                Navigator.pushNamed(context, '/signup');
+                Navigator.pop(context);
               },
             ),
+
             TextButton(
               onPressed: () async {
-                await FirebaseAuth.instance.signInAnonymously();
-                Navigator.pushNamed(context, '/homepage');
+                Navigator.pushNamed(context, '/forgotpass');
               },
-              child: const Text('Sign in Anounymously'),
+              child: const Text('Forgot Password?'),
             )
           ],
         ),

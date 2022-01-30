@@ -6,6 +6,7 @@ Future<String> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
+    // await FirebaseAuth.instance.signInWithCredential(FacebookAuthProvider.credential(accesstoken))
     return 'Yes';
   } catch (e) {
     print(e);
@@ -67,21 +68,21 @@ class Authmethods {
     required String email,
     required String password,
     required String name,
-    required String mobileno,
+    required int mobileno,
   }) async {
     String res = 'some error occured';
     try {
       if (email.isNotEmpty &&
           password.isNotEmpty &&
           name.isNotEmpty &&
-          mobileno.isNotEmpty) {
+          mobileno.toString().length == 10) {
         //register the user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
         print(cred.user?.uid);
-
+        // _auth.currentUser?.sendEmailVerification();
         //adding user to database
         await _firestore.collection('users').doc(cred.user?.uid).set({
           'name': name,
@@ -101,9 +102,34 @@ class Authmethods {
         //   'email': email,
         //   'mobileNo': mobileno,
         // });
-        res = 'success';
+        res = 'Sign up Successful';
+      } else if (email.isEmpty &&
+          password.isNotEmpty &&
+          name.isNotEmpty &&
+          mobileno.toString().length == 10) {
+        res = "Please enter your email";
+      } else if (email.isNotEmpty &&
+          password.isEmpty &&
+          name.isNotEmpty &&
+          mobileno.toString().length == 10) {
+        res = "Please enter your password";
+      } else if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          name.isEmpty &&
+          mobileno.toString().length == 10) {
+        res = "Please enter your name";
+      } else if (email.isNotEmpty &&
+          password.isNotEmpty &&
+          name.isNotEmpty &&
+          mobileno.toString().length != 10) {
+        res = "Please enter valid mobile number";
+      } else if (email.isEmpty ||
+          password.isEmpty ||
+          name.isEmpty ||
+          mobileno.toString().length != 10) {
+        res = "Please enter all the credentials";
       } else {
-        res = "Fields cannot be empty";
+        res = 'Something went wrong';
       }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
