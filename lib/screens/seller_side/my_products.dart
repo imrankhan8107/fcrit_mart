@@ -44,10 +44,11 @@ class Myproducts extends StatelessWidget {
 }
 
 class CardswithDetails extends StatelessWidget {
-  const CardswithDetails({Key? key,
-    required this.color,
-    required this.title,
-    required this.subtitle})
+  const CardswithDetails(
+      {Key? key,
+      required this.color,
+      required this.title,
+      required this.subtitle})
       : super(key: key);
   final Color color;
   final String title;
