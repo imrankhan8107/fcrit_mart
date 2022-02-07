@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fcrit_mart/model/user_model.dart' as model;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -6,9 +7,12 @@ Future<String> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
-    // await FirebaseAuth.instance.signInWithCredential(FacebookAuthProvider.credential(accesstoken))
     return 'Yes';
-  } catch (e) {
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "user-not-found":
+        return 'User Not Found';
+    }
     print(e);
     return 'No';
   }
@@ -36,33 +40,6 @@ class Authmethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String> addImage({
-    required String file,
-    required String productName,
-    required String description,
-  }) async {
-    String res = 'some error occured';
-    try {
-      if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
-        await _firestore
-            .collection('users')
-            .doc(_auth.currentUser?.uid)
-            .collection('products')
-            .doc(_auth.currentUser?.uid)
-            .set({
-          'Name': productName,
-          'file': file,
-          'description': description,
-        });
-        res = 'success';
-      }
-      return res;
-    } catch (e) {
-      res = e.toString();
-    }
-    return res;
-  }
-
   //signup the user
   Future<String> signUpUser({
     required String email,
@@ -77,19 +54,30 @@ class Authmethods {
           name.isNotEmpty &&
           mobileno.toString().length == 10) {
         //register the user
+        // _auth.verifyPhoneNumber(phoneNumber: phoneNumber, verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
         print(cred.user?.uid);
         // _auth.currentUser?.sendEmailVerification();
+        model.User user = model.User(
+          name: name,
+          uid: cred.user!.uid,
+          email: email,
+          mobileno: mobileno,
+        );
         //adding user to database
-        await _firestore.collection('users').doc(cred.user?.uid).set({
-          'name': name,
-          'uid': cred.user?.uid,
-          'email': email,
-          'mobileNo': mobileno,
-        });
+        // await _firestore.collection('users').doc(cred.user?.uid).set({
+        //   'name': name,
+        //   'uid': cred.user?.uid,
+        //   'email': email,
+        //   'mobileNo': mobileno,
+        // });
+        await _firestore
+            .collection('users')
+            .doc(cred.user?.uid)
+            .set(user.toJson());
         //set method is only on the document above
         //using the set method we get the same uid everywhere.so in case if we want to access through uid then set method is prefarable
         //another way of doing this above database stuff
@@ -133,6 +121,9 @@ class Authmethods {
       }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
+        case "email-already-in-use":
+          res = "An Account Already Exist For The Provided E-mail";
+          break;
         case "invalid-email":
           res = "Your email address appears to be malformed.";
           break;
@@ -154,7 +145,6 @@ class Authmethods {
         default:
           res = "An undefined Error happened.";
       }
-      Fluttertoast.showToast(msg: res);
       print(e.code);
     }
     Fluttertoast.showToast(msg: res);

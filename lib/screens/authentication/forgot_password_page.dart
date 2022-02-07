@@ -1,3 +1,4 @@
+import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,24 +17,33 @@ class _ForgotPassState extends State<ForgotPass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Please Enter Your Email Address'),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 20,
+                const SizedBox(
+                  height: 100,
+                ),
+                const Text('Please Enter Your Email Address'),
+                const SizedBox(
+                  height: 30,
                 ),
                 Textfieldinput(
                   textEditingController: _emailid,
                   hinttext: 'Enter your Email Address here',
                   textInputType: TextInputType.emailAddress,
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 20,
+                const SizedBox(
+                  height: 20,
                 ),
                 ElevatedButton(
                   onPressed: () async {

@@ -1,14 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-const kScaffoldbackgroundcolor = Color(0xFF101010);
+ShowSnackBar(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(content),
+  ));
+}
 
-const kAppBarTheme = AppBarTheme(
+bool switchVal = false;
+
+var kAppBarTheme = kLightAppBarTheme;
+var kScaffoldbackgroundcolor = kLightBackgroundColor;
+const kDarkBackgroundColor = Color(0xFF101010);
+const kLightBackgroundColor = Color(0xFFFFFFFF);
+const kLightAppBarTheme = AppBarTheme(
+  toolbarHeight: 75,
+  titleTextStyle: kAppbartitle,
+  color: Color(0xFFFFFFFF),
+);
+const kDarkAppBarTheme = AppBarTheme(
   toolbarHeight: 75,
   titleTextStyle: kAppbartitle,
   color: Color(0xFF101010),
 );
 
+const kHomepageTextStyle = TextStyle(
+  fontSize: 80,
+  fontFamily: 'Lobster',
+  color: Colors.cyan,
+);
 const kTextstyle = TextStyle(
   fontSize: 15,
   color: Color(0xFFA4A4A4),
@@ -17,7 +37,6 @@ const kAppbartitle = TextStyle(
   fontSize: 40,
   fontWeight: FontWeight.bold,
 );
-
 const kBottomButtonStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
@@ -26,7 +45,7 @@ const kBottomButtonStyle = TextStyle(
 const kGradientcolor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.topRight,
-  colors: [Color(0xFFB515DF), Color(0xFFD127A4)],
+  colors: [Colors.red, Colors.blue],
 );
 
 class AppDrawer extends StatefulWidget {
@@ -41,7 +60,7 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
-        backgroundColor: kScaffoldbackgroundcolor,
+        backgroundColor: kDarkBackgroundColor,
         child: Column(
           children: [
             Container(
@@ -56,17 +75,23 @@ class _AppDrawerState extends State<AppDrawer> {
               height: MediaQuery.of(context).size.height / 5,
               width: MediaQuery.of(context).size.width,
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(CupertinoIcons.profile_circled),
               title: Text('Profile'),
+              onTap: () {
+                Navigator.pushNamed(context, '/profilepage');
+              },
             ),
             const ListTile(
-              leading: Icon(CupertinoIcons.cart),
+              leading: Icon(CupertinoIcons.cart_fill),
               title: Text('My cart'),
             ),
-            const ListTile(
-              leading: Icon(CupertinoIcons.settings),
-              title: Text('Settings'),
+            ListTile(
+              leading: const Icon(CupertinoIcons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
+              },
             ),
           ],
         ),

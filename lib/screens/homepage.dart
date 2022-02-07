@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String usertype = 'Select';
+
+  void usertypechoosen(context, String usertype) {
+    if (usertype == 'Buyer') {
+      Navigator.pushNamed(context, '/buyerpage');
+    } else if (usertype == 'Seller') {
+      Navigator.pushNamed(context, '/sellerpage');
+    } else {
+      usertype = 'Select';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: Appbarbutton(
           ontapAppbar: () {
-            Navigator.pop(context);
+            exit(0);
           },
         ),
         actions: [
@@ -35,7 +48,10 @@ class _HomePageState extends State<HomePage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       usertype = newValue!;
-                      user(context, usertype);
+                      usertypechoosen(context, usertype);
+                      setState(() {
+                        usertype = 'Select';
+                      });
                     });
                   },
                   items: <String>['Select', 'Buyer', 'Seller']
@@ -53,24 +69,10 @@ class _HomePageState extends State<HomePage> {
       ),
       body: const Center(
         child: Text(
-          'Welcome to \nFCRIT MART',
-          style: TextStyle(
-            fontSize: 80,
-            fontFamily: 'Lobster',
-            color: Colors.cyan,
-          ),
+          'Welcome to FCRIT MART',
+          style: kHomepageTextStyle,
         ),
       ),
     );
-  }
-}
-
-void user(context, String usertype) {
-  if (usertype == 'Buyer') {
-    Navigator.pushNamed(context, '/buyerpage');
-  } else if (usertype == 'Seller') {
-    Navigator.pushNamed(context, '/sellerpage');
-  } else {
-    usertype = 'Select';
   }
 }

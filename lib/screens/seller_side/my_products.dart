@@ -1,3 +1,4 @@
+import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/list_of_items.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,11 @@ class Myproducts extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          leading: Appbarbutton(
+            ontapAppbar: () {
+              Navigator.pop(context);
+            },
+          ),
           title: const Text(
             'Seller page',
             style: TextStyle(fontSize: 18),
@@ -38,11 +44,10 @@ class Myproducts extends StatelessWidget {
 }
 
 class CardswithDetails extends StatelessWidget {
-  const CardswithDetails(
-      {Key? key,
-      required this.color,
-      required this.title,
-      required this.subtitle})
+  const CardswithDetails({Key? key,
+    required this.color,
+    required this.title,
+    required this.subtitle})
       : super(key: key);
   final Color color;
   final String title;
