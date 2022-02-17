@@ -2,9 +2,12 @@ import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/bottom_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/flutterfire.dart';
+import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
+import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
+  static const String id = 'sign_up_screen';
   const SignUp({Key? key}) : super(key: key);
 
   @override
@@ -65,27 +68,32 @@ class _SignUpState extends State<SignUp> {
               // ),
               // const Credential(credentialname: 'Name'),
               const SizedBox(height: 10),
-              Image.asset(
-                'images/fcritlogo.png',
-                height: MediaQuery.of(context).size.height / 3,
+              Flexible(
+                child: Image.asset(
+                  'images/fcritlogo.png',
+                  height: MediaQuery.of(context).size.height / 3,
+                ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Textfieldinput(
                 textEditingController: _name,
                 hinttext: 'Enter your Name',
                 textInputType: TextInputType.name,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Textfieldinput(
                 textEditingController: _mobilenumber,
                 hinttext: 'Enter your Mobile number',
                 textInputType: TextInputType.number,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Textfieldinput(
                 textEditingController: _emailField,
                 hinttext: 'Enter your Email',
                 textInputType: TextInputType.emailAddress,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               Textfieldinput(
@@ -93,6 +101,7 @@ class _SignUpState extends State<SignUp> {
                 hinttext: 'Enter your Password',
                 textInputType: TextInputType.text,
                 ispass: true,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
               BottomButton(
@@ -109,14 +118,14 @@ class _SignUpState extends State<SignUp> {
                   );
                   print(res);
                   if (res == 'Sign up Successful') {
-                    Navigator.pushReplacementNamed(context, '/homepage');
+                    Navigator.pushReplacementNamed(context, HomePage.id);
                   }
                 },
                 buttontext: 'Sign-up',
                 text: 'Already have an account?',
                 textinbutton: 'Log-in',
                 ontextpress: () {
-                  Navigator.pushReplacementNamed(context, '/signin');
+                  Navigator.pushReplacementNamed(context, SignIn.id);
                 },
               ),
             ],

@@ -4,12 +4,18 @@ import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/bottom_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/flutterfire.dart';
+import 'package:fcrit_mart/screens/authentication/forgot_password_page.dart';
+import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
+import 'package:fcrit_mart/screens/homepage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../constants.dart';
 
 class SignIn extends StatefulWidget {
+  static const String id = 'sign_in_screen';
+
   const SignIn({Key? key}) : super(key: key);
 
   @override
@@ -41,7 +47,7 @@ class _SignInState extends State<SignIn> {
         title: const Text('Log in'),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         children: [
           Column(
             children: [
@@ -60,7 +66,7 @@ class _SignInState extends State<SignIn> {
               //     ),
               //   ],
               // ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Image.asset(
                 'images/fcritlogo.png',
                 height: MediaQuery.of(context).size.height / 3,
@@ -70,6 +76,7 @@ class _SignInState extends State<SignIn> {
                 textEditingController: _emailField,
                 hinttext: 'Enter your Email',
                 textInputType: TextInputType.emailAddress,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 30),
               Textfieldinput(
@@ -77,6 +84,7 @@ class _SignInState extends State<SignIn> {
                 hinttext: 'Enter your Password',
                 textInputType: TextInputType.text,
                 ispass: true,
+                maxlines: 1,
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 30),
               BottomButton(
@@ -85,7 +93,7 @@ class _SignInState extends State<SignIn> {
                       await signIn(_emailField.text, _passwordField.text);
                   if (shouldnavigate == 'Yes') {
                     ShowSnackBar('Sign-in Success', context);
-                    Navigator.pushReplacementNamed(context, '/homepage');
+                    Navigator.pushReplacementNamed(context, HomePage.id);
                   } else {
                     Fluttertoast.showToast(msg: shouldnavigate);
                   }
@@ -94,16 +102,16 @@ class _SignInState extends State<SignIn> {
                 text: 'Don\'t have an account?',
                 textinbutton: 'Sign-up',
                 ontextpress: () {
-                  Navigator.pushReplacementNamed(context, '/signup');
+                  Navigator.pushReplacementNamed(context, SignUp.id);
                 },
               ),
 
               TextButton(
                 onPressed: () async {
-                  Navigator.pushNamed(context, '/forgotpass');
+                  Navigator.pushNamed(context, ForgotPass.id);
                 },
                 child: const Text('Forgot Password?'),
-              )
+              ),
             ],
           ),
         ],

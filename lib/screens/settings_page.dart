@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Settings extends StatefulWidget {
+  static const String id = 'settings_screen';
   const Settings({Key? key}) : super(key: key);
 
   @override
@@ -54,9 +55,9 @@ class _SettingsState extends State<Settings> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SignIn(),
+                  builder: (context) => const SignIn(),
                 ),
-                ModalRoute.withName('/signin'),
+                ModalRoute.withName(SignIn.id),
               );
             },
             child: Row(

@@ -2,23 +2,27 @@ import 'dart:io';
 
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/screens/buyer_side/buyer_page.dart';
+import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  static const String id = 'homepage_screen';
   const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   String usertype = 'Select';
 
   void usertypechoosen(context, String usertype) {
     if (usertype == 'Buyer') {
-      Navigator.pushNamed(context, '/buyerpage');
+      Navigator.pushNamed(context, Buyerpage.id);
     } else if (usertype == 'Seller') {
-      Navigator.pushNamed(context, '/sellerpage');
+      Navigator.pushNamed(context, Sellerpage.id);
     } else {
       usertype = 'Select';
     }
@@ -31,7 +35,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: Appbarbutton(
           ontapAppbar: () {
-            exit(0);
+            // exit(0);
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialogbox();
+              },
+            );
           },
         ),
         actions: [
@@ -73,6 +83,76 @@ class _HomePageState extends State<HomePage> {
           style: kHomepageTextStyle,
         ),
       ),
+    );
+  }
+}
+
+class Dialogbox extends StatefulWidget {
+  const Dialogbox({Key? key}) : super(key: key);
+
+  @override
+  _DialogboxState createState() => _DialogboxState();
+}
+
+class _DialogboxState extends State<Dialogbox>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation animation;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    controller.forward();
+
+    animation =
+        ColorTween(begin: Colors.cyan, end: Colors.grey).animate(controller);
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+    controller.addListener(() {
+      setState(() {});
+      animation.value;
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: animation.value,
+      title: const Center(
+        child:
+            Text('Exit', style: TextStyle(color: Colors.black, fontSize: 30)),
+      ),
+      content: const Text('Do you want to exit?',
+          style: TextStyle(color: Colors.black, fontSize: 15)),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text(
+            'No',
+            style: TextStyle(color: Colors.black, fontSize: 15),
+          ),
+        ),
+        TextButton(
+          onPressed: () => exit(0),
+          child: const Text('YES',
+              style: TextStyle(color: Colors.black, fontSize: 15)),
+        ),
+      ],
     );
   }
 }

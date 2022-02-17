@@ -29,14 +29,14 @@ class _FcritmartState extends State<Fcritmart> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/signin': (context) => const SignIn(),
-        '/signup': (context) => const SignUp(),
-        '/homepage': (context) => const HomePage(),
-        '/buyerpage': (context) => const Buyerpage(),
-        '/sellerpage': (context) => const Sellerpage(),
-        '/forgotpass': (context) => const ForgotPass(),
-        '/settings': (context) => const Settings(),
-        '/profilepage': (context) => const Profilepage(),
+        SignIn.id: (context) => const SignIn(),
+        SignUp.id: (context) => const SignUp(),
+        HomePage.id: (context) => const HomePage(),
+        Buyerpage.id: (context) => const Buyerpage(),
+        Sellerpage.id: (context) => const Sellerpage(),
+        ForgotPass.id: (context) => const ForgotPass(),
+        Settings.id: (context) => const Settings(),
+        Profilepage.id: (context) => const Profilepage(),
       },
       theme: ThemeData.dark().copyWith(
         appBarTheme: kDarkAppBarTheme,

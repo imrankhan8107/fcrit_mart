@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/image.dart';
+import 'package:fcrit_mart/components/text_field.dart';
+import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,31 +50,18 @@ class _AddProductsState extends State<AddProducts> {
               ),
               leading: Appbarbutton(
                 ontapAppbar: () {
-                  Navigator.popAndPushNamed(context, '/sellerpage');
+                  Navigator.popAndPushNamed(context, Sellerpage.id);
                 },
               ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height / 40,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 30,
-              ),
-              child: TextField(
-                maxLines: 1,
-                controller: _productname,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: Divider.createBorderSide(context),
-                  ),
-                  hintText: 'Product Name',
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(15),
-                ),
-              ),
-            ),
+            Textfieldinput(
+                textEditingController: _productname,
+                hinttext: 'Product Name',
+                textInputType: TextInputType.text,
+                maxlines: 1),
             _image != null
                 ? GestureDetector(
                     onTap: () async {
@@ -132,62 +121,23 @@ class _AddProductsState extends State<AddProducts> {
                       ),
                     ),
                   ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 30,
-              ),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                controller: _mrp,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: Divider.createBorderSide(context),
-                  ),
-                  hintText: 'Actual Price of Product',
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(15),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 30,
-              ),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                maxLines: 1,
-                controller: _price,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: Divider.createBorderSide(context),
-                  ),
-                  hintText: 'Price Offered',
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(15),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 30,
-              ),
-              child: TextField(
-                maxLines: 5,
-                controller: _description,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: Divider.createBorderSide(context),
-                  ),
-                  hintText: 'Description',
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(15),
-                ),
-              ),
-            ),
+            Textfieldinput(
+                textEditingController: _mrp,
+                hinttext: 'Actual Price of Product',
+                textInputType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                maxlines: 1),
+            Textfieldinput(
+                textEditingController: _price,
+                hinttext: 'Price Offered',
+                textInputType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                maxlines: 1),
+            Textfieldinput(
+                textEditingController: _description,
+                hinttext: 'Description',
+                textInputType: TextInputType.text,
+                maxlines: 5),
             const SizedBox(
               height: 30,
             ),
@@ -199,8 +149,7 @@ class _AddProductsState extends State<AddProducts> {
                       int.parse(_price.text) != 0 &&
                       int.parse(_mrp.text) > int.parse(_price.text)) {
                     String photoUrl = await StorageMethods()
-                        .uploadimgtofirebase(
-                            'productImages', _image!, false, _productname.text);
+                        .uploadimgtofirebase('productImages', _image!, false);
                     String imgres = await StorageMethods().addImage(
                       mrp: int.parse(_mrp.text, onError: (String value) {
                         value = '';

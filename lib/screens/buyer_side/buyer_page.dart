@@ -3,6 +3,7 @@ import 'package:fcrit_mart/screens/buyer_side/buyer_side_view.dart';
 import 'package:flutter/material.dart';
 
 class Buyerpage extends StatefulWidget {
+  static const String id = 'buyer_page_screen';
   const Buyerpage({Key? key}) : super(key: key);
 
   @override
