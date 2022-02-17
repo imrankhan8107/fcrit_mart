@@ -1,10 +1,12 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
+import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPass extends StatefulWidget {
+  static const String id = 'forgot_pass_screen';
   const ForgotPass({Key? key}) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class _ForgotPassState extends State<ForgotPass> {
                   textEditingController: _emailid,
                   hinttext: 'Enter your Email Address here',
                   textInputType: TextInputType.emailAddress,
+                  maxlines: 1,
                 ),
                 const SizedBox(
                   height: 20,
@@ -53,6 +56,9 @@ class _ForgotPassState extends State<ForgotPass> {
                           .sendPasswordResetEmail(email: _emailid.text);
                       Fluttertoast.showToast(
                           msg: 'An Email Has been sent to reset password');
+                      Navigator.pushReplacementNamed(context, SignIn.id);
+                      Fluttertoast.showToast(
+                          msg: 'You are redirected to Log in page');
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found') {
                         print(e.code);
@@ -61,7 +67,7 @@ class _ForgotPassState extends State<ForgotPass> {
                       }
                     }
                   },
-                  child: Text('Get Email to reset password'),
+                  child: const Text('Get Email to reset password'),
                 )
               ],
             ),

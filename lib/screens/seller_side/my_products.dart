@@ -60,6 +60,7 @@ class CardswithDetails extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: Card(
         child: ListTile(
+          style: ListTileStyle.list,
           leading: Container(
             width: MediaQuery.of(context).size.width / 4,
             height: MediaQuery.of(context).size.height,

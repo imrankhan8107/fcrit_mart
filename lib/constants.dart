@@ -1,3 +1,5 @@
+import 'package:fcrit_mart/screens/profile_page.dart';
+import 'package:fcrit_mart/screens/settings_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +47,7 @@ const kBottomButtonStyle = TextStyle(
 const kGradientcolor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.topRight,
-  colors: [Colors.red, Colors.blue],
+  colors: [Color(0xFFB515DF), Color(0xFFD127A4)],
 );
 
 class AppDrawer extends StatefulWidget {
@@ -79,7 +81,7 @@ class _AppDrawerState extends State<AppDrawer> {
               leading: Icon(CupertinoIcons.profile_circled),
               title: Text('Profile'),
               onTap: () {
-                Navigator.pushNamed(context, '/profilepage');
+                Navigator.pushNamed(context, Profilepage.id);
               },
             ),
             const ListTile(
@@ -90,7 +92,7 @@ class _AppDrawerState extends State<AppDrawer> {
               leading: const Icon(CupertinoIcons.settings),
               title: const Text('Settings'),
               onTap: () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.pushNamed(context, Settings.id);
               },
             ),
           ],

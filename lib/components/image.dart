@@ -34,10 +34,15 @@ class StorageMethods {
             .collection('users')
             .doc(_auth.currentUser?.uid)
             .collection('products')
-            .doc()
-            .set({
+            .add({
           'Name': productName,
           'file': file,
+          'id': _firestore
+              .collection('users')
+              .doc(_auth.currentUser?.uid)
+              .collection('products')
+              .doc()
+              .id,
           'description': description,
           'mrp': mrp,
           'price': price,
@@ -53,13 +58,10 @@ class StorageMethods {
 
   //adding image to firebase storage
   Future<String> uploadimgtofirebase(
-      String childname, Uint8List file, bool ispost, String productname) async {
+      String childname, Uint8List file, bool ispost) async {
     String res = "Error occurred while upload";
     try {
-      Reference ref = _storage
-          .ref()
-          .child(childname)
-          .child(_firestore.collection(productname).id);
+      Reference ref = _storage.ref().child(childname);
       UploadTask uploadTask = ref.putData(file);
       TaskSnapshot snap = await uploadTask;
       String downloadurl = await snap.ref.getDownloadURL();

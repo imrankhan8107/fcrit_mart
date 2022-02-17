@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'add_product.dart';
 
 class Sellerpage extends StatefulWidget {
+  static const String id = 'seller_page_screen';
   const Sellerpage({Key? key}) : super(key: key);
 
   @override
