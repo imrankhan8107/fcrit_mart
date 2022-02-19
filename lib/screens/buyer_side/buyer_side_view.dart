@@ -1,5 +1,4 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
-import 'package:fcrit_mart/components/list_of_items.dart';
 import 'package:flutter/material.dart';
 
 class BuyersideHomepage extends StatelessWidget {
@@ -34,7 +33,7 @@ class BuyersideHomepage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            allproducts,
+            Text('All products'),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(

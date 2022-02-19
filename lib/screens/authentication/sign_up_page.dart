@@ -68,10 +68,11 @@ class _SignUpState extends State<SignUp> {
               // ),
               // const Credential(credentialname: 'Name'),
               const SizedBox(height: 10),
-              Flexible(
+              Hero(
+                tag: 'logo',
                 child: Image.asset(
                   'images/fcritlogo.png',
-                  height: MediaQuery.of(context).size.height / 3,
+                  height: MediaQuery.of(context).size.height / 4,
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),

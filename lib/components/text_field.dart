@@ -20,9 +20,10 @@ class Textfieldinput extends StatelessWidget {
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
       borderSide: Divider.createBorderSide(context),
+      borderRadius: BorderRadius.circular(10),
     );
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
       child: TextFormField(
         // validator: (value) {
         //   if (value!.isEmpty) {

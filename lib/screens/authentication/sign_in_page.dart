@@ -67,9 +67,12 @@ class _SignInState extends State<SignIn> {
               //   ],
               // ),
               const SizedBox(height: 5),
-              Image.asset(
-                'images/fcritlogo.png',
-                height: MediaQuery.of(context).size.height / 3,
+              Hero(
+                tag: 'logo',
+                child: Image.asset(
+                  'images/fcritlogo.png',
+                  height: MediaQuery.of(context).size.height / 3,
+                ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 20),
               Textfieldinput(

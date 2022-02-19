@@ -26,26 +26,19 @@ class StorageMethods {
     required String file,
     required String productName,
     required String description,
+    required String uniqueId,
   }) async {
     String res = 'some error occured';
     try {
       if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
-        await _firestore
-            .collection('users')
-            .doc(_auth.currentUser?.uid)
-            .collection('products')
-            .add({
+        DocumentReference doc = _firestore.collection('products').doc(uniqueId);
+        await doc.set({
           'Name': productName,
           'file': file,
-          'id': _firestore
-              .collection('users')
-              .doc(_auth.currentUser?.uid)
-              .collection('products')
-              .doc()
-              .id,
           'description': description,
           'mrp': mrp,
           'price': price,
+          'id': uniqueId,
         });
         res = 'success';
       }
@@ -58,10 +51,10 @@ class StorageMethods {
 
   //adding image to firebase storage
   Future<String> uploadimgtofirebase(
-      String childname, Uint8List file, bool ispost) async {
+      String childname, Uint8List file, bool ispost, String uniqueId) async {
     String res = "Error occurred while upload";
     try {
-      Reference ref = _storage.ref().child(childname);
+      Reference ref = _storage.ref().child(childname).child(uniqueId);
       UploadTask uploadTask = ref.putData(file);
       TaskSnapshot snap = await uploadTask;
       String downloadurl = await snap.ref.getDownloadURL();

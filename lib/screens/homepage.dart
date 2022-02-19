@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/screens/buyer_side/buyer_page.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage>
             showDialog<String>(
               context: context,
               builder: (BuildContext context) {
-                return Dialogbox();
+                return const Dialogbox();
               },
             );
           },
@@ -77,10 +78,46 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to FCRIT MART',
-          style: kHomepageTextStyle,
+      body: Center(
+        child: DefaultTextStyle(
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height / 5),
+              Hero(
+                tag: 'logo',
+                child: Image.asset(
+                  'images/fcritlogo.png',
+                  height: MediaQuery.of(context).size.height / 3,
+                ),
+              ),
+              const SizedBox(height: 30),
+              AnimatedTextKit(
+                animatedTexts: [
+                  RotateAnimatedText('Welcome'),
+                  RotateAnimatedText('To'),
+                  ColorizeAnimatedText(
+                    'Fcrit Mart',
+                    speed: Duration(seconds: 2),
+                    colors: [
+                      Colors.redAccent,
+                      Colors.yellowAccent,
+                      Colors.green,
+                      Colors.pink,
+                      Colors.orange,
+                      Colors.lightBlueAccent,
+                    ],
+                    textStyle: const TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -122,12 +159,12 @@ class _DialogboxState extends State<Dialogbox>
     });
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    controller.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   controller.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +178,10 @@ class _DialogboxState extends State<Dialogbox>
           style: TextStyle(color: Colors.black, fontSize: 15)),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            controller.dispose();
+            Navigator.of(context).pop();
+          },
           child: const Text(
             'No',
             style: TextStyle(color: Colors.black, fontSize: 15),

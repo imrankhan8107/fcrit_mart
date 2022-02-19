@@ -5,9 +5,11 @@ import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../constants.dart';
 
@@ -37,6 +39,50 @@ class _AddProductsState extends State<AddProducts> {
 
   @override
   Widget build(BuildContext context) {
+    _selectimage(BuildContext context) async {
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text('Upload Image'),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('Take a Photo'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List image = await pickimage(ImageSource.camera);
+                  setState(() {
+                    _image = image;
+                  });
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('Choose from Gallery'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List image = await pickimage(ImageSource.gallery);
+                  setState(() {
+                    _image = image;
+                  });
+                },
+              ),
+              _image == null
+                  ? const Divider(height: 0)
+                  : CupertinoDialogAction(
+                      child: const Text('Remove Image'),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          _image = null;
+                        });
+                      },
+                    ),
+            ],
+          );
+        },
+      );
+    }
+
     return ListView(
       children: [
         Column(
@@ -54,21 +100,16 @@ class _AddProductsState extends State<AddProducts> {
                 },
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 40,
-            ),
             Textfieldinput(
                 textEditingController: _productname,
                 hinttext: 'Product Name',
                 textInputType: TextInputType.text,
                 maxlines: 1),
+            SizedBox(height: 5),
             _image != null
                 ? GestureDetector(
                     onTap: () async {
-                      Uint8List img = await pickimage(ImageSource.gallery);
-                      setState(() {
-                        _image = img;
-                      });
+                      _selectimage(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -77,6 +118,7 @@ class _AddProductsState extends State<AddProducts> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 3,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
                             image: MemoryImage(_image!),
                             fit: BoxFit.cover,
@@ -94,22 +136,17 @@ class _AddProductsState extends State<AddProducts> {
                   )
                 : GestureDetector(
                     onTap: () async {
-                      Uint8List img = await pickimage(ImageSource.gallery);
-                      setState(() {
-                        _image = img;
-                      });
+                      _selectimage(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 30,
                       ),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('images/bluebackground.jpg'),
-                            fit: BoxFit.cover,
-                          ),
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blueAccent,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -121,6 +158,7 @@ class _AddProductsState extends State<AddProducts> {
                       ),
                     ),
                   ),
+            SizedBox(height: 5),
             Textfieldinput(
                 textEditingController: _mrp,
                 hinttext: 'Actual Price of Product',
@@ -137,19 +175,22 @@ class _AddProductsState extends State<AddProducts> {
                 textEditingController: _description,
                 hinttext: 'Description',
                 textInputType: TextInputType.text,
-                maxlines: 5),
+                maxlines: 4),
             const SizedBox(
-              height: 30,
+              height: 10,
             ),
             GestureDetector(
               onTap: () async {
                 try {
+                  var uuid = const Uuid();
+                  String productId = uuid.v4();
                   if (FirebaseAuth.instance.currentUser?.isAnonymous != true &&
                       int.parse(_mrp.text) != 0 &&
                       int.parse(_price.text) != 0 &&
                       int.parse(_mrp.text) > int.parse(_price.text)) {
                     String photoUrl = await StorageMethods()
-                        .uploadimgtofirebase('productImages', _image!, false);
+                        .uploadimgtofirebase(
+                            'productImages', _image!, false, productId);
                     String imgres = await StorageMethods().addImage(
                       mrp: int.parse(_mrp.text, onError: (String value) {
                         value = '';
@@ -162,7 +203,9 @@ class _AddProductsState extends State<AddProducts> {
                       file: photoUrl,
                       productName: _productname.text,
                       description: _description.text,
+                      uniqueId: productId,
                     );
+
                     print(imgres);
                     print(photoUrl);
                   } else if (FirebaseAuth.instance.currentUser?.isAnonymous ==
@@ -207,9 +250,14 @@ class _AddProductsState extends State<AddProducts> {
                   horizontal: 30,
                 ),
                 child: Container(
-                  child: const Center(child: Text('Upload')),
-                  padding: const EdgeInsets.all(20),
+                  child: const Center(
+                      child: Text(
+                    'Upload',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  )),
+                  padding: const EdgeInsets.all(15),
                   decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kGradientcolor,
                   ),
                 ),
