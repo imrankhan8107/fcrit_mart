@@ -1,4 +1,5 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/screens/user/get_user_details.dart';
 import 'package:flutter/material.dart';
 
 class BuyersideHomepage extends StatelessWidget {
@@ -33,7 +34,7 @@ class BuyersideHomepage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            Text('All products'),
+            const AllProductDetails(),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
@@ -46,38 +47,6 @@ class BuyersideHomepage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class CardswithDetails extends StatelessWidget {
-  const CardswithDetails(
-      {Key? key,
-      required this.color,
-      required this.title,
-      required this.subtitle})
-      : super(key: key);
-  final Color color;
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Card(
-        child: ListTile(
-          leading: Container(
-            width: MediaQuery.of(context).size.width / 4,
-            height: MediaQuery.of(context).size.height,
-            color: color,
-          ),
-          title: Text(title),
-          subtitle: Text(subtitle),
-          // trailing: Icon(Icons.more_vert),
-          isThreeLine: true,
         ),
       ),
     );

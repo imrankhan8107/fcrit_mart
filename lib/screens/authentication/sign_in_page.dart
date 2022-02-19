@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/bottom_button.dart';
 import 'package:fcrit_mart/components/text_field.dart';
@@ -41,13 +39,18 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         leading: Appbarbutton(
           ontapAppbar: () {
-            exit(0);
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) {
+                return const Dialogbox();
+              },
+            );
           },
         ),
         title: const Text('Log in'),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         children: [
           Column(
             children: [
@@ -81,7 +84,7 @@ class _SignInState extends State<SignIn> {
                 textInputType: TextInputType.emailAddress,
                 maxlines: 1,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 30),
+              // SizedBox(height: MediaQuery.of(context).size.height / 60),
               Textfieldinput(
                 textEditingController: _passwordField,
                 hinttext: 'Enter your Password',
@@ -89,7 +92,7 @@ class _SignInState extends State<SignIn> {
                 ispass: true,
                 maxlines: 1,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 30),
+              SizedBox(height: MediaQuery.of(context).size.height / 60),
               BottomButton(
                 ontapbutton: () async {
                   String shouldnavigate =

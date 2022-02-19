@@ -1,5 +1,5 @@
 import 'package:fcrit_mart/constants.dart';
-import 'package:fcrit_mart/screens/buyer_side/buyer_side_view.dart';
+import 'package:fcrit_mart/screens/user/buyer_side/buyer_side_view.dart';
 import 'package:flutter/material.dart';
 
 class Buyerpage extends StatefulWidget {

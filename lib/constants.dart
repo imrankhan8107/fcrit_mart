@@ -1,5 +1,6 @@
 import 'package:fcrit_mart/screens/profile_page.dart';
 import 'package:fcrit_mart/screens/settings_page.dart';
+import 'package:fcrit_mart/screens/user/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -84,9 +85,12 @@ class _AppDrawerState extends State<AppDrawer> {
                 Navigator.pushNamed(context, Profilepage.id);
               },
             ),
-            const ListTile(
+            ListTile(
               leading: Icon(CupertinoIcons.cart_fill),
               title: Text('My cart'),
+              onTap: () {
+                Navigator.pushNamed(context, MyCart.id);
+              },
             ),
             ListTile(
               leading: const Icon(CupertinoIcons.settings),

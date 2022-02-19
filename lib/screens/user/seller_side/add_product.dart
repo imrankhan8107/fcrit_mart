@@ -3,15 +3,15 @@ import 'dart:typed_data';
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/components/text_field.dart';
-import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
+import 'package:fcrit_mart/constants.dart';
+import 'package:fcrit_mart/screens/homepage.dart';
+import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../constants.dart';
 
 class AddProducts extends StatefulWidget {
   const AddProducts({Key? key}) : super(key: key);
@@ -204,6 +204,19 @@ class _AddProductsState extends State<AddProducts> {
                       productName: _productname.text,
                       description: _description.text,
                       uniqueId: productId,
+                    );
+
+                    CupertinoAlertDialog(
+                      title: const Text('Item Uploaded Successfully'),
+                      actions: [
+                        CupertinoDialogAction(
+                          child: const Text('Return to HomePage'),
+                          onPressed: () {
+                            Navigator.popUntil(
+                                context, ModalRoute.withName(HomePage.id));
+                          },
+                        )
+                      ],
                     );
 
                     print(imgres);

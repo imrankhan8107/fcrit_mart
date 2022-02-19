@@ -2,11 +2,12 @@ import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/screens/authentication/forgot_password_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
-import 'package:fcrit_mart/screens/buyer_side/buyer_page.dart';
 import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:fcrit_mart/screens/profile_page.dart';
-import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
 import 'package:fcrit_mart/screens/settings_page.dart';
+import 'package:fcrit_mart/screens/user/buyer_side/buyer_page.dart';
+import 'package:fcrit_mart/screens/user/cart_page.dart';
+import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class _FcritmartState extends State<Fcritmart> {
         ForgotPass.id: (context) => const ForgotPass(),
         Settings.id: (context) => const Settings(),
         Profilepage.id: (context) => const Profilepage(),
+        MyCart.id: (context) => const MyCart(),
       },
       theme: ThemeData.dark().copyWith(
         appBarTheme: kDarkAppBarTheme,

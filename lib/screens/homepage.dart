@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
-import 'package:fcrit_mart/screens/buyer_side/buyer_page.dart';
-import 'package:fcrit_mart/screens/seller_side/seller_page.dart';
+import 'package:fcrit_mart/screens/user/buyer_side/buyer_page.dart';
+import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -140,11 +140,11 @@ class _DialogboxState extends State<Dialogbox>
     // TODO: implement initState
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     controller.forward();
 
-    animation =
-        ColorTween(begin: Colors.cyan, end: Colors.grey).animate(controller);
+    animation = ColorTween(begin: Colors.indigoAccent, end: Colors.blueAccent)
+        .animate(controller);
 
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -159,13 +159,6 @@ class _DialogboxState extends State<Dialogbox>
     });
   }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   controller.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -175,7 +168,7 @@ class _DialogboxState extends State<Dialogbox>
             Text('Exit', style: TextStyle(color: Colors.black, fontSize: 30)),
       ),
       content: const Text('Do you want to exit?',
-          style: TextStyle(color: Colors.black, fontSize: 15)),
+          style: TextStyle(color: Colors.black, fontSize: 18)),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -184,13 +177,13 @@ class _DialogboxState extends State<Dialogbox>
           },
           child: const Text(
             'No',
-            style: TextStyle(color: Colors.black, fontSize: 15),
+            style: TextStyle(color: Colors.black, fontSize: 16),
           ),
         ),
         TextButton(
           onPressed: () => exit(0),
           child: const Text('YES',
-              style: TextStyle(color: Colors.black, fontSize: 15)),
+              style: TextStyle(color: Colors.amberAccent, fontSize: 16)),
         ),
       ],
     );

@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/screens/user/get_user_details.dart';
 import 'package:flutter/material.dart';
-
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class Myproducts extends StatefulWidget {
   const Myproducts({Key? key}) : super(key: key);
@@ -47,7 +45,7 @@ class _MyproductsState extends State<Myproducts> {
         ),
         body: const TabBarView(
           children: [
-            Details(),
+            AllProductDetails(),
             Center(child: Text('My products')),
           ],
         ),
@@ -86,46 +84,6 @@ class CardswithDetails extends StatelessWidget {
           // isThreeLine: true,
         ),
       ),
-    );
-  }
-}
-
-class Details extends StatelessWidget {
-  const Details({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _firestore.collection('products').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else {
-          if (snapshot.hasData) {
-            var product = snapshot.data.docs;
-            List<Widget> allProducts = [];
-            for (var item in product) {
-              final image = item.data()['file'];
-              final productName = item.data()['Name'];
-              final description = item.data()['description'];
-              final mrp = item.data()['mrp'];
-              final price = item.data()['price'];
-
-              final tile = CardswithDetails(
-                  title: productName,
-                  subtitle: mrp.toString(),
-                  imageUrl: image);
-              allProducts.add(tile);
-            }
-            return ListView(
-              children: allProducts,
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-        }
-        return Divider(height: 0);
-      },
     );
   }
 }
