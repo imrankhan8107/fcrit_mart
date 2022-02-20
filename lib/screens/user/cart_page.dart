@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:flutter/material.dart';
+
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class MyCart extends StatefulWidget {
   static const String id = 'user_cart';
@@ -14,15 +17,14 @@ class _MyCartState extends State<MyCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('My Cart'),
         leading: Appbarbutton(
           ontapAppbar: () {
             Navigator.pop(context);
           },
         ),
       ),
-      body: const Center(
-        child: Text('Cart Page'),
-      ),
+      // body: StreamBuilder(builder: (BuildContext context, AsyncSnapshot snapshot) {  },),
     );
   }
 }

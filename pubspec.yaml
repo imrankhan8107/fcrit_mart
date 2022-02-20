@@ -37,6 +37,9 @@ flutter:
     - images/
 
   fonts:
+    - family: PermanentMarker
+      fonts:
+        - asset: fonts/PermanentMarker-Regular.ttf
     - family: Lobster
       fonts:
         - asset: fonts/Lobster-Regular.ttf

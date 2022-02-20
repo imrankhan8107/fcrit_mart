@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+var image, productName, description, mrp, price;
+
 class AllProductDetails extends StatelessWidget {
   const AllProductDetails({Key? key}) : super(key: key);
-
+  // final String product;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -19,11 +21,11 @@ class AllProductDetails extends StatelessWidget {
             var product = snapshot.data.docs;
             List<Widget> allProducts = [];
             for (var item in product) {
-              final image = item.data()['file'];
-              final productName = item.data()['Name'];
-              final description = item.data()['description'];
-              final mrp = item.data()['mrp'];
-              final price = item.data()['price'];
+              image = item.data()['file'];
+              productName = item.data()['Name'];
+              description = item.data()['description'];
+              mrp = item.data()['mrp'];
+              price = item.data()['price'];
 
               final tile = CardswithDetails(
                   title: productName,
