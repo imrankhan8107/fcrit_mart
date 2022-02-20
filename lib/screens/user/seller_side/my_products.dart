@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/screens/user/get_product_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +44,9 @@ class _MyproductsState extends State<Myproducts> {
         body: const TabBarView(
           children: [
             AllProductDetails(),
-            Center(child: Text('My products')),
+            Center(
+              child: Text('My products'),
+            ),
           ],
         ),
       ),
@@ -51,16 +55,22 @@ class _MyproductsState extends State<Myproducts> {
 }
 
 class CardswithDetails extends StatefulWidget {
-  const CardswithDetails(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.imageUrl})
-      : super(key: key);
+  const CardswithDetails({
+    Key? key,
+    required this.productname,
+    required this.mrp,
+    required this.imageUrl,
+    required this.price,
+    required this.description,
+    required this.productId,
+  }) : super(key: key);
 
-  final String title;
-  final String subtitle;
+  final String productname;
+  final String mrp;
+  final String price;
   final String imageUrl;
+  final String description;
+  final String productId;
 
   @override
   State<CardswithDetails> createState() => _CardswithDetailsState();
@@ -78,9 +88,13 @@ class _CardswithDetailsState extends State<CardswithDetails> {
               context: context,
               builder: (context) {
                 return BottomPopup(
-                    imageUrl: widget.imageUrl,
-                    title: widget.title,
-                    subtitle: widget.subtitle);
+                  imageUrl: widget.imageUrl,
+                  productName: widget.productname,
+                  mrp: widget.mrp,
+                  price: widget.price,
+                  description: widget.description,
+                  id: widget.productId,
+                );
               },
             );
           },
@@ -90,8 +104,8 @@ class _CardswithDetailsState extends State<CardswithDetails> {
             height: MediaQuery.of(context).size.height,
             child: Image.network(widget.imageUrl),
           ),
-          title: Text(widget.title),
-          subtitle: Text(widget.subtitle),
+          title: Text(widget.productname),
+          subtitle: Text(widget.mrp),
           // trailing: Icon(Icons.more_vert),
           // isThreeLine: true,
         ),
@@ -100,17 +114,28 @@ class _CardswithDetailsState extends State<CardswithDetails> {
   }
 }
 
-class BottomPopup extends StatelessWidget {
+class BottomPopup extends StatefulWidget {
   const BottomPopup(
       {Key? key,
       required this.imageUrl,
-      required this.title,
-      required this.subtitle})
+      required this.productName,
+      required this.mrp,
+      required this.price,
+      required this.description,
+      required this.id})
       : super(key: key);
   final String imageUrl;
-  final String title;
-  final String subtitle;
+  final String productName;
+  final String mrp;
+  final String price;
+  final String description;
+  final String id;
 
+  @override
+  State<BottomPopup> createState() => _BottomPopupState();
+}
+
+class _BottomPopupState extends State<BottomPopup> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -141,11 +166,11 @@ class BottomPopup extends StatelessWidget {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height / 2.5,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.network(imageUrl),
+                        child: Image.network(widget.imageUrl),
                       ),
                     ),
                     Text(
-                      title,
+                      widget.productName,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 25,
@@ -153,7 +178,7 @@ class BottomPopup extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      subtitle,
+                      widget.mrp,
                       style: const TextStyle(
                         color: Colors.teal,
                         fontSize: 25,
@@ -171,7 +196,19 @@ class BottomPopup extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).collection('Cart').doc().se
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser?.uid)
+                      .collection('Cart')
+                      .doc(widget.id)
+                      .set({
+                    'productName': widget.productName,
+                    'mrp': widget.mrp,
+                    'imageUrl': widget.imageUrl,
+                    'price': widget.price,
+                    'description': widget.description,
+                    'id': widget.id,
+                  });
                 },
                 child: const Text(
                   'add to cart',

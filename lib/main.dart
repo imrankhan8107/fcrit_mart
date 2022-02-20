@@ -40,10 +40,12 @@ class _FcritmartState extends State<Fcritmart> {
         Profilepage.id: (context) => const Profilepage(),
         MyCart.id: (context) => const MyCart(),
       },
-      theme: ThemeData.dark().copyWith(
-        appBarTheme: kDarkAppBarTheme,
-        scaffoldBackgroundColor: kDarkBackgroundColor,
-      ),
+      theme: switchVal
+          ? ThemeData.light()
+          : ThemeData.dark().copyWith(
+              appBarTheme: kDarkAppBarTheme,
+              scaffoldBackgroundColor: kDarkBackgroundColor,
+            ),
       // initialRoute: '/signup',
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(

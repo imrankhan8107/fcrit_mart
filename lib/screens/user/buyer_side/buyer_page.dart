@@ -1,5 +1,6 @@
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/screens/user/buyer_side/buyer_side_view.dart';
+import 'package:fcrit_mart/screens/user/get_product_details.dart';
 import 'package:flutter/material.dart';
 
 class Buyerpage extends StatefulWidget {
@@ -14,8 +15,14 @@ class _BuyerpageState extends State<Buyerpage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     const BuyersideHomepage(),
-    const Center(
-      child: Text('Items Added to cart will be displayed here'),
+    Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'My Cart',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      body: GetCartItems(),
     ),
   ];
 

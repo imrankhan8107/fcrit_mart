@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/screens/user/get_product_details.dart';
 import 'package:flutter/material.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -24,6 +25,7 @@ class _MyCartState extends State<MyCart> {
           },
         ),
       ),
+      body: const GetCartItems(),
       // body: StreamBuilder(builder: (BuildContext context, AsyncSnapshot snapshot) {  },),
     );
   }
