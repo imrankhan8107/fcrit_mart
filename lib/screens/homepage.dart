@@ -60,9 +60,7 @@ class _HomePageState extends State<HomePage>
                     setState(() {
                       usertype = newValue!;
                       usertypechoosen(context, usertype);
-                      setState(() {
-                        usertype = 'Select';
-                      });
+                      usertype = 'Select';
                     });
                   },
                   items: <String>['Select', 'Buyer', 'Seller']

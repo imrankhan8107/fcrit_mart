@@ -100,6 +100,7 @@ class _AddProductsState extends State<AddProducts> {
                 },
               ),
             ),
+            SizedBox(height: 15),
             Textfieldinput(
                 textEditingController: _productname,
                 hinttext: 'Product Name',
@@ -140,7 +141,7 @@ class _AddProductsState extends State<AddProducts> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
+                        horizontal: 15,
                       ),
                       child: Container(
                         height: 50,
