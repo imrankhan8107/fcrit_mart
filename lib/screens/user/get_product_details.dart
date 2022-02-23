@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-var image, productName, description, mrp, price, productId;
+var imageUrl, productName, description, mrp, price, productId;
 
 class AllProductDetails extends StatelessWidget {
   const AllProductDetails({
@@ -24,7 +24,7 @@ class AllProductDetails extends StatelessWidget {
             var product = snapshot.data.docs;
             List<Widget> allProducts = [];
             for (var item in product) {
-              image = item.data()['file'];
+              imageUrl = item.data()['file'];
               productName = item.data()['Name'];
               description = item.data()['description'];
               mrp = item.data()['mrp'];
@@ -34,7 +34,7 @@ class AllProductDetails extends StatelessWidget {
               final tile = CardswithDetails(
                 productname: productName,
                 mrp: mrp.toString(),
-                imageUrl: image,
+                imageUrl: imageUrl,
                 description: description,
                 price: price.toString(),
                 productId: productId,
@@ -54,11 +54,31 @@ class AllProductDetails extends StatelessWidget {
   }
 }
 
+Image getImage(String imageurl) {
+  return Image.network(
+    imageurl,
+    filterQuality: FilterQuality.medium,
+    loadingBuilder:
+        (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+      if (loadingProgress == null) {
+        return child;
+      }
+      return CircularProgressIndicator(
+        value: loadingProgress.expectedTotalBytes != null
+            ? loadingProgress.cumulativeBytesLoaded /
+                loadingProgress.expectedTotalBytes!
+            : null,
+      );
+    },
+  );
+}
+
 class GetCartItems extends StatelessWidget {
-  const GetCartItems({Key? key}) : super(key: key);
+  GetCartItems({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int totalAmount = 0;
     return StreamBuilder(
       stream: _firestore
           .collection('users')
@@ -68,7 +88,7 @@ class GetCartItems extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: 150,
             child: const CircularProgressIndicator(),
           );
         } else {
@@ -76,25 +96,37 @@ class GetCartItems extends StatelessWidget {
             var product = snapshot.data.docs;
             List<Widget> cartProducts = [];
             for (var item in product) {
-              image = item.data()['imageUrl'];
+              imageUrl = item.data()['imageUrl'];
               productName = item.data()['productName'];
               description = item.data()['description'];
               mrp = item.data()['mrp'];
               price = item.data()['price'];
               productId = item.data()['id'];
+              totalAmount = totalAmount + int.parse(price);
+              print(totalAmount);
 
-              final tile = CardswithDetails(
-                productname: productName,
-                mrp: mrp.toString(),
-                imageUrl: image,
-                description: description,
-                price: price.toString(),
-                productId: productId,
+              final tile = Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: ListTile(
+                    onTap: () {},
+                    style: ListTileStyle.list,
+                    leading: SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.height,
+                      child: getImage(imageUrl),
+                    ),
+                    title: Text(productName),
+                    subtitle: Text(price),
+                    // trailing: Icon(Icons.more_vert),
+                    // isThreeLine: true,
+                  ),
+                ),
               );
               cartProducts.add(tile);
             }
             return ListView(
-              children: cartProducts,
+              children: cartProducts + [Text('Total Amount: $totalAmount')],
             );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');

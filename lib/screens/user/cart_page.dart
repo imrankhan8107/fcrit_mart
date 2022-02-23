@@ -25,7 +25,7 @@ class _MyCartState extends State<MyCart> {
           },
         ),
       ),
-      body: const GetCartItems(),
+      body: GetCartItems(),
       // body: StreamBuilder(builder: (BuildContext context, AsyncSnapshot snapshot) {  },),
     );
   }

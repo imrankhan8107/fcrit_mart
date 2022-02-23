@@ -102,10 +102,10 @@ class _CardswithDetailsState extends State<CardswithDetails> {
           leading: SizedBox(
             width: MediaQuery.of(context).size.width / 4,
             height: MediaQuery.of(context).size.height,
-            child: Image.network(widget.imageUrl),
+            child: getImage(widget.imageUrl),
           ),
           title: Text(widget.productname),
-          subtitle: Text(widget.mrp),
+          subtitle: Text(widget.price),
           // trailing: Icon(Icons.more_vert),
           // isThreeLine: true,
         ),
@@ -148,7 +148,7 @@ class _BottomPopupState extends State<BottomPopup> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
             ),
           ),
           bottomSheet: BottomSheet(
@@ -157,16 +157,16 @@ class _BottomPopupState extends State<BottomPopup> {
             },
             builder: (BuildContext context) {
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 20),
+                          horizontal: 15, vertical: 10),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height / 2.5,
+                        height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,
-                        child: Image.network(widget.imageUrl),
+                        child: getImage(widget.imageUrl),
                       ),
                     ),
                     Text(
@@ -177,13 +177,26 @@ class _BottomPopupState extends State<BottomPopup> {
                         fontFamily: 'PermanentMarker',
                       ),
                     ),
-                    Text(
-                      widget.mrp,
-                      style: const TextStyle(
-                        color: Colors.teal,
-                        fontSize: 25,
-                        // fontFamily: 'PermanentMarker',
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'PRICE :  ' + widget.price,
+                          style: const TextStyle(
+                            color: Colors.cyanAccent,
+                            fontSize: 25,
+                            // fontFamily: 'PermanentMarker',
+                          ),
+                        ),
+                        Text(
+                          'MRP :  ' + widget.mrp,
+                          style: const TextStyle(
+                            color: Colors.cyanAccent,
+                            fontSize: 25,
+                            // fontFamily: 'PermanentMarker',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
