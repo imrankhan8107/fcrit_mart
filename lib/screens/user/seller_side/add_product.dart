@@ -4,7 +4,6 @@ import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/components/image.dart';
 import 'package:fcrit_mart/components/text_field.dart';
 import 'package:fcrit_mart/constants.dart';
-import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -206,19 +205,23 @@ class _AddProductsState extends State<AddProducts> {
                       description: _description.text,
                       uniqueId: productId,
                     );
-
-                    CupertinoAlertDialog(
-                      title: const Text('Item Uploaded Successfully'),
-                      actions: [
-                        CupertinoDialogAction(
-                          child: const Text('Return to HomePage'),
-                          onPressed: () {
-                            Navigator.popUntil(
-                                context, ModalRoute.withName(HomePage.id));
-                          },
-                        )
-                      ],
-                    );
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: const Text('Item Uploaded Successfully'),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: const Text('Return to HomePage'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.popAndPushNamed(
+                                      context, Sellerpage.id);
+                                },
+                              )
+                            ],
+                          );
+                        });
 
                     print(imgres);
                     print(photoUrl);
@@ -258,6 +261,7 @@ class _AddProductsState extends State<AddProducts> {
                   Fluttertoast.showToast(msg: e.toString());
                   print(e.toString());
                 }
+                // Navigator.pushReplacementNamed(context, Sellerpage.id);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(
