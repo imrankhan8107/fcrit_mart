@@ -21,6 +21,9 @@ class BuyersideHomepage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
+          ],
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
@@ -34,7 +37,7 @@ class BuyersideHomepage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            AllProductDetails(),
+            const AllProductDetails(),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(
