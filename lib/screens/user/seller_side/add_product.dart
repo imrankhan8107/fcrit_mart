@@ -206,22 +206,23 @@ class _AddProductsState extends State<AddProducts> {
                       uniqueId: productId,
                     );
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CupertinoAlertDialog(
-                            title: const Text('Item Uploaded Successfully'),
-                            actions: [
-                              CupertinoDialogAction(
-                                child: const Text('Return to HomePage'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.popAndPushNamed(
-                                      context, Sellerpage.id);
-                                },
-                              )
-                            ],
-                          );
-                        });
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: const Text('Item Uploaded Successfully'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: const Text('Return to HomePage'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.popAndPushNamed(
+                                    context, Sellerpage.id);
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
 
                     print(imgres);
                     print(photoUrl);
