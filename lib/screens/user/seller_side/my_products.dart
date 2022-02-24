@@ -229,9 +229,17 @@ class _BottomPopupState extends State<BottomPopup> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser?.uid)
+                      .collection('Cart')
+                      .doc(widget.id)
+                      .delete();
+                  setState(() {});
+                },
                 child: const Text(
-                  'See the item',
+                  'Delete the item',
                   style: TextStyle(color: Colors.black, fontSize: 15),
                 ),
               ),
