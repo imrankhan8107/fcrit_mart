@@ -67,6 +67,7 @@ class _SignUpState extends State<SignUp> {
               //   ],
               // ),
               // const Credential(credentialname: 'Name'),
+
               const SizedBox(height: 10),
               Hero(
                 tag: 'logo',

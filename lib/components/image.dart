@@ -29,9 +29,9 @@ class StorageMethods {
     required String uniqueId,
   }) async {
     String res = 'some error occured';
+    DocumentReference doc = _firestore.collection('products').doc(uniqueId);
     try {
       if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
-        DocumentReference doc = _firestore.collection('products').doc(uniqueId);
         await doc.set({
           'Name': productName,
           'file': file,

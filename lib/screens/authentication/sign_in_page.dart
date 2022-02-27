@@ -108,7 +108,7 @@ class _SignInState extends State<SignIn> {
                 text: 'Don\'t have an account?',
                 textinbutton: 'Sign-up',
                 ontextpress: () {
-                  Navigator.pushReplacementNamed(context, SignUp.id);
+                  Navigator.pushNamed(context, SignUp.id);
                 },
               ),
 

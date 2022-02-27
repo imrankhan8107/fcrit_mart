@@ -1,42 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/model/user_model.dart' as model;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 Future<String> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
-    const CircularProgressIndicator();
     return 'Yes';
   } on FirebaseAuthException catch (e) {
     switch (e.code) {
+      case "ERROR_INVALID_EMAIL":
+        return 'Invalid Email.';
+      case "wrong-password":
+        return 'Wrong Password,\nPlease enter correct password';
       case "user-not-found":
         return 'User Not Found';
     }
-    print(e);
-    return 'No';
+    return 'NO';
+    print(e.code);
   }
 }
 
-Future<String> signUp(String email, String password) async {
-  try {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
-    return 'Yes';
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      print('the password provided is too weak');
-    } else if (e.code == 'email-already-in-use') {
-      print('the Account already exist for that email');
-    }
-    return 'No';
-  } catch (e) {
-    print(e.toString());
-    return 'No';
-  }
-}
+// Future<String> signUp(String email, String password) async {
+//   try {
+//     await FirebaseAuth.instance
+//         .createUserWithEmailAndPassword(email: email, password: password);
+//
+//     return 'Yes';
+//   } on FirebaseAuthException catch (e) {
+//     if (e.code == 'weak-password') {
+//       print('the password provided is too weak');
+//     } else if (e.code == 'email-already-in-use') {
+//       print('the Account already exist for that email');
+//     }
+//     return 'No';
+//   } catch (e) {
+//     print(e.toString());
+//     return 'No';
+//   }
+// }
 
 class Authmethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;

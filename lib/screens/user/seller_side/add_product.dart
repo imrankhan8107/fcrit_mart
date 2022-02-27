@@ -27,16 +27,6 @@ class _AddProductsState extends State<AddProducts> {
   Uint8List? _image;
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _productname.dispose();
-    _description.dispose();
-    _mrp.dispose();
-    _price.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _selectimage(BuildContext context) async {
       return showDialog(
@@ -215,6 +205,10 @@ class _AddProductsState extends State<AddProducts> {
                               child: const Text('Return to HomePage'),
                               onPressed: () {
                                 Navigator.of(context).pop();
+                                _productname.dispose();
+                                _description.dispose();
+                                _mrp.dispose();
+                                _price.dispose();
                                 Navigator.popAndPushNamed(
                                     context, Sellerpage.id);
                               },

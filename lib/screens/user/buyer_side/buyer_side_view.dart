@@ -1,6 +1,7 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/screens/user/get_product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BuyersideHomepage extends StatelessWidget {
   const BuyersideHomepage({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class BuyersideHomepage extends StatelessWidget {
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
+                icon: Icon(FontAwesomeIcons.productHunt),
                 text: 'All products',
               ),
               Tab(
