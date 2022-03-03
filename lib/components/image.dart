@@ -21,6 +21,16 @@ class StorageMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  setSearchParam(String caseNumber) {
+    List<String> caseSearchList = [];
+    String temp = "";
+    for (int i = 0; i < caseNumber.length; i++) {
+      temp = temp + caseNumber[i];
+      caseSearchList.add(temp);
+    }
+    return caseSearchList;
+  }
+
   Future<String> addImage({
     required int mrp,
     required int price,
@@ -31,38 +41,40 @@ class StorageMethods {
   }) async {
     DateTime currentTime = DateTime.now();
     String res = 'some error occured';
+
     DocumentReference allProductsDocRef =
         _firestore.collection('products').doc(uniqueId);
-    DocumentReference myProductsDocRef = _firestore
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .collection('myProducts')
-        .doc(uniqueId);
+    // DocumentReference myProductsDocRef = _firestore
+    //     .collection('users')
+    //     .doc(_auth.currentUser!.uid)
+    //     .collection('myProducts')
+    //     .doc(uniqueId);
     try {
       if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
         await allProductsDocRef.set({
           'owner': _auth.currentUser?.uid,
           'checkedOut': false,
-          'Name': productName,
+          'Name': productName.toLowerCase(),
           'file': file,
           'description': description,
           'publishTime': currentTime,
           'mrp': mrp,
+          'search': setSearchParam(productName),
           'price': price,
           'id': uniqueId,
         });
 
-        await myProductsDocRef.set({
-          'owner': _auth.currentUser?.uid,
-          'checkedOut': false,
-          'Name': productName,
-          'file': file,
-          'description': description,
-          'publishTime': currentTime,
-          'mrp': mrp,
-          'price': price,
-          'id': uniqueId,
-        });
+        // await myProductsDocRef.set({
+        //   'owner': _auth.currentUser?.uid,
+        //   'checkedOut': false,
+        //   'Name': productName.toLowerCase(),
+        //   'file': file,
+        //   'description': description,
+        //   'publishTime': currentTime,
+        //   'mrp': mrp,
+        //   'price': price,
+        //   'id': uniqueId,
+        // });
         res = 'success';
       }
       return res;
@@ -78,20 +90,21 @@ class StorageMethods {
     String res = "Error occurred while upload";
     try {
       Reference ref = _storage.ref().child(childname).child(uniqueId);
-      // UploadTask uploadTask = ref.putData(file);
-      // TaskSnapshot snap = await uploadTask;
-      // String downloadurl = await snap.ref.getDownloadURL();
+      UploadTask uploadTask = ref.putData(file);
+      TaskSnapshot snap = await uploadTask;
+      String downloadurl = await snap.ref.getDownloadURL();
       String url = await ref.putData(file).snapshot.ref.getDownloadURL();
       res = 'success';
       Fluttertoast.showToast(msg: res);
-      // print('res: $res');
-      // print('downloadurl: $downloadurl');
+      print('res: $res');
+      print('downloadurl: $downloadurl');
       return url;
     } catch (e) {
-      // print(e.toString());
+      print(e.toString());
       res = 'error occurred while upload';
-      // print('res:$res');
+      print('res:$res');
     }
+    Fluttertoast.showToast(msg: 'Image was not uploaded.');
     return 'https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg';
   }
 }

@@ -1,65 +1,39 @@
-import 'package:fcrit_mart/components/appbar_button.dart';
+import 'package:fcrit_mart/screens/user/buyer_side/search_page.dart';
 import 'package:fcrit_mart/screens/user/get_product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../components/appbar_button.dart';
 
 class BuyersideHomepage extends StatelessWidget {
   BuyersideHomepage({Key? key}) : super(key: key);
-  final TextEditingController searchBox = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    List searchListResult = [];
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Buyer view',
-            style: TextStyle(fontSize: 18),
-          ),
-          leading: Appbarbutton(
-            ontapAppbar: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
-          ],
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                text: 'All products',
-              ),
-              Tab(
-                text: 'Search',
-              ),
-            ],
-          ),
+    // List searchListResult = [];
+    //TODO:SEARCH PAGE
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Buyer view',
+          style: TextStyle(fontSize: 18),
         ),
-        body: TabBarView(
-          children: [
-            AllProductDetails(),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: searchBox,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      border: OutlineInputBorder(
-                        borderSide: Divider.createBorderSide(context),
-                      ),
-                    ),
-                  ),
-                  // SearchResults(searchInput: searchBox.text),
-                ],
-              ),
-            ),
-          ],
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.pop(context);
+          },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchScreen()));
+              },
+              icon: Icon(FontAwesomeIcons.search)),
+          IconButton(onPressed: () {}, icon: const Icon(FontAwesomeIcons.heart))
+        ],
       ),
+      body: AllProductDetails(),
     );
   }
 }

@@ -28,6 +28,7 @@ class _AddProductsState extends State<AddProducts> {
 
   @override
   Widget build(BuildContext context) {
+    bool uploading = true;
     _selectimage(BuildContext context) async {
       return showDialog(
         context: context,
@@ -172,6 +173,17 @@ class _AddProductsState extends State<AddProducts> {
             GestureDetector(
               onTap: () async {
                 try {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return uploading
+                            ? Container(
+                                height: 200,
+                                width: 200,
+                                child: CircularProgressIndicator(),
+                              )
+                            : Divider(height: 0);
+                      });
                   var uuid = const Uuid();
                   String productId = uuid.v4();
                   if (FirebaseAuth.instance.currentUser?.isAnonymous != true &&
@@ -195,6 +207,10 @@ class _AddProductsState extends State<AddProducts> {
                       description: _description.text,
                       uniqueId: productId,
                     );
+                    setState(() {
+                      uploading = false;
+                      Navigator.of(context).pop();
+                    });
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -254,9 +270,9 @@ class _AddProductsState extends State<AddProducts> {
                   }
                 } catch (e) {
                   Fluttertoast.showToast(msg: e.toString());
+                  Navigator.of(context).pop();
                   print(e.toString());
                 }
-                // Navigator.pushReplacementNamed(context, Sellerpage.id);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(

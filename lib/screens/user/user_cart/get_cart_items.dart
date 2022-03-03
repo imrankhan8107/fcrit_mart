@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
 
 import '../get_product_details.dart';
+import 'carts_items_cards.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -39,6 +42,7 @@ class _GetCartItemsState extends State<GetCartItems> {
 
   @override
   Widget build(BuildContext context) {
+    String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     return StreamBuilder(
       stream: _firestore
           .collection('users')
@@ -49,8 +53,8 @@ class _GetCartItemsState extends State<GetCartItems> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: SizedBox(
-              height: 150,
-              width: 150,
+              height: 200,
+              width: 200,
               child: CircularProgressIndicator(),
             ),
           );
@@ -105,20 +109,74 @@ class _GetCartItemsState extends State<GetCartItems> {
                                     vertical: 15.0, horizontal: 30),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    FirebaseMessaging.onMessage.listen((event) {
-                                      print('message received');
-                                      print('message data : ${event.data}');
-                                      if (event.notification != null) {
-                                        print(
-                                            'Message also contained a notification: ${event.notification}');
-                                      }
-                                    });
+                                    // FirebaseMessaging.onMessage.listen((event) {
+                                    //   print('message received');
+                                    //   print('message data : ${event.data}');
+                                    //   if (event.notification != null) {
+                                    //     print(
+                                    //         'Message also contained a notification: ${event.notification}');
+                                    //   }
+                                    // });
                                     // String? refreshtoken =
                                     //     await firebaseMessaging.getToken();
                                     // print(refreshtoken);
                                     // firebaseMessaging.sendMessage(
                                     //   to: refreshtoken,
                                     // );
+                                    //TODO: make an new collection named ORDERS and add a unique order id and ordertime along with buyer and sellers uids and then show contact details of seller to buyer and remove product from all products and add to soldout subcollection of seller and purchased subcollection of buyer
+                                    for (var element in cartProducts) {
+                                      if (ownerId != currentUserUid) {
+                                        String _uid = const Uuid().v1();
+                                        _firestore
+                                            .collection('order')
+                                            .doc(productId)
+                                            .set({
+                                          'orderId': _uid,
+                                          'checkoutTime': DateTime.now(),
+                                          'sellerId': ownerId,
+                                          'buyerId': FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          'productName': productName,
+                                          'productId': productId,
+                                          'description': description,
+                                          'imageUrl': imageUrl,
+                                          'mrp': mrp,
+                                          'price': price,
+                                        });
+                                        if (ownerId ==
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      'Product Checked Out'),
+                                                  content: Text(
+                                                      'Your Product $productName has been checked out.\nPlease check Sold items.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('OK'),
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        }
+                                        _firestore
+                                            .collection('products')
+                                            .doc(productId)
+                                            .delete();
+                                      } else {
+                                        Fluttertoast.showToast(
+                                          msg:
+                                              "YOU CAN'T BUY YOUR OWN PRODUCTS",
+                                        );
+                                      }
+                                    }
                                   },
                                   child: const Text('PROCEED TO CHECKOUT'),
                                   style: ButtonStyle(

@@ -15,7 +15,10 @@ class _MyCartState extends State<MyCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Cart'),
+        title: const Text(
+          'My Cart',
+          style: TextStyle(fontSize: 30),
+        ),
         leading: Appbarbutton(
           ontapAppbar: () {
             Navigator.pop(context);

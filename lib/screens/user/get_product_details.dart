@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/item_card.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 // final FirebaseInAppMessaging firebaseInAppMessaging =
 //     FirebaseInAppMessaging.instance;
 
@@ -23,6 +23,31 @@ class AllProductDetails extends StatefulWidget {
 class _AllProductDetailsState extends State<AllProductDetails> {
   bool sortInDescending = true;
   String sortItemsBy = 'price';
+  bool itemInOrders = false;
+
+  Widget filterButton(String filterBy, String buttonText) {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          sortItemsBy = filterBy;
+        });
+      },
+      child: Text(
+        buttonText,
+        style: TextStyle(fontSize: 17),
+      ),
+    );
+  }
+
+  void productInOrders(String id) async {
+    bool containsItem =
+        await _firestore.collection('order').snapshots().contains(id);
+    setState(() {
+      itemInOrders = containsItem;
+      print(containsItem);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -38,88 +63,73 @@ class _AllProductDetailsState extends State<AllProductDetails> {
             var product = snapshot.data.docs;
             List<Widget> allProducts = [
               TextButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Scaffold(
-                          appBar: AppBar(
-                            title: const Text(
-                              'Filter Options',
-                              style: TextStyle(fontSize: 25),
-                            ),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Scaffold(
+                        appBar: AppBar(
+                          title: const Text(
+                            'Filter Options',
+                            style: TextStyle(fontSize: 25),
                           ),
-                          body: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                        ),
+                        body: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            filterButton('price', 'PRICE'),
+                            filterButton('mrp', 'MRP'),
+                            filterButton('publishTime', 'Time'),
+                          ],
+                        ),
+                        bottomSheet: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      sortItemsBy = 'price';
-                                    });
-                                  },
-                                  child: const Text('price')),
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      sortItemsBy = 'mrp';
-                                    });
-                                  },
-                                  child: Text('mrp')),
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      sortItemsBy = 'publishTime';
-                                    });
-                                  },
-                                  child: Text('publishTime'))
+                              sortInDescending
+                                  ? const Text(
+                                      'Sorted in Descending',
+                                    )
+                                  : const Text('Sorted in Ascending'),
+                              // Switch(
+                              //     value: sortInDescending,
+                              //     onChanged: (bool val) {
+                              //       setState(() {
+                              //         sortInDescending = val;
+                              //       });
+                              //     }),
+                              CupertinoSwitch(
+                                value: sortInDescending,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    sortInDescending = value;
+                                    Navigator.of(context).pop();
+                                  });
+                                },
+                              )
                             ],
                           ),
-                          bottomSheet: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                sortInDescending
-                                    ? Text('Sorted in Descending')
-                                    : Text('Sorted in Ascending'),
-                                // Switch(
-                                //     value: sortInDescending,
-                                //     onChanged: (bool val) {
-                                //       setState(() {
-                                //         sortInDescending = val;
-                                //       });
-                                //     }),
-                                CupertinoSwitch(
-                                  value: sortInDescending,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      sortInDescending = value;
-                                      Navigator.of(context).pop();
-                                    });
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          sortItemsBy,
-                          style: TextStyle(fontSize: 17),
                         ),
-                        sortInDescending
-                            ? Icon(Icons.arrow_downward)
-                            : Icon(Icons.arrow_upward),
-                      ],
-                    ),
-                  ))
+                      );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        sortItemsBy.toUpperCase(),
+                        style: const TextStyle(fontSize: 17),
+                      ),
+                      sortInDescending
+                          ? const Icon(Icons.arrow_downward)
+                          : const Icon(Icons.arrow_upward),
+                    ],
+                  ),
+                ),
+              )
             ];
             for (var item in product) {
               imageUrl = item.data()['file'];
@@ -129,18 +139,19 @@ class _AllProductDetailsState extends State<AllProductDetails> {
               price = item.data()['price'];
               productId = item.data()['id'];
               ownerId = item.data()['owner'];
-
-              final tile = CardswithDetails(
-                productname: productName,
-                mrp: mrp.toString(),
-                imageUrl: imageUrl,
-                description: description,
-                price: price.toString(),
-                productId: productId,
-                ownerid: ownerId,
-              );
-
-              allProducts.add(tile);
+              var checkOut = item.data()['checkedOut'];
+              if (checkOut == false && itemInOrders == false) {
+                final tile = CardswithDetails(
+                  productname: productName,
+                  mrp: mrp.toString(),
+                  imageUrl: imageUrl,
+                  description: description,
+                  price: price.toString(),
+                  productId: productId,
+                  ownerid: ownerId,
+                );
+                allProducts.add(tile);
+              }
             }
             // return GridView.count(
             //   clipBehavior: Clip.antiAlias,
@@ -151,7 +162,7 @@ class _AllProductDetailsState extends State<AllProductDetails> {
             //   crossAxisCount: 2,
             //   children: allProducts,
             // );
-            return allProducts.isNotEmpty
+            return allProducts.length > 1
                 ? ListView(
                     children: allProducts,
                   )
@@ -180,6 +191,7 @@ Image getImage(String imageurl) {
         return child;
       }
       return CircularProgressIndicator(
+        color: Colors.cyan,
         value: loadingProgress.expectedTotalBytes != null
             ? loadingProgress.cumulativeBytesLoaded /
                 loadingProgress.expectedTotalBytes!
@@ -187,104 +199,6 @@ Image getImage(String imageurl) {
       );
     },
   );
-}
-
-class CartItemCards extends StatefulWidget {
-  const CartItemCards({
-    Key? key,
-    required this.productname,
-    required this.mrp,
-    required this.imageUrl,
-    required this.price,
-    required this.description,
-    required this.productId,
-  }) : super(key: key);
-
-  final String productname;
-  final String mrp;
-  final String price;
-  final String imageUrl;
-  final String description;
-  final String productId;
-
-  @override
-  State<CartItemCards> createState() => _CartItemCardsState();
-}
-
-class _CartItemCardsState extends State<CartItemCards> {
-  @override
-  Widget build(BuildContext context) {
-    // print('CartItemCards');
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Card(
-        child: ListTile(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return CupertinoAlertDialog(
-                  title: Text(widget.productname),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text('View Item'),
-                      onPressed: () {},
-                    ),
-                    CupertinoDialogAction(
-                      child: const Text('Remove Item from Cart'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return CupertinoAlertDialog(
-                              title: const Text('Remove?'),
-                              actions: [
-                                CupertinoDialogAction(
-                                  child: const Text('Yes'),
-                                  onPressed: () {
-                                    //TODO: remove item from cart
-                                    _firestore
-                                        .collection('users')
-                                        .doc(FirebaseAuth
-                                            .instance.currentUser?.uid)
-                                        .collection('Cart')
-                                        .doc(widget.productId)
-                                        .delete();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                  child: const Text('NO'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                )
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          style: ListTileStyle.list,
-          leading: SizedBox(
-            width: MediaQuery.of(context).size.width / 4,
-            height: MediaQuery.of(context).size.height,
-            child: getImage(widget.imageUrl),
-          ),
-          title: Text(widget.productname),
-          subtitle: Text(widget.price),
-          // trailing: Icon(Icons.more_vert),
-          // isThreeLine: true,
-        ),
-      ),
-    );
-  }
 }
 
 // showCupertinoModalPopup(

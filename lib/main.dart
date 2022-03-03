@@ -4,10 +4,11 @@ import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
 import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:fcrit_mart/screens/profile_page.dart';
-import 'package:fcrit_mart/screens/see_product.dart';
 import 'package:fcrit_mart/screens/settings_page.dart';
 import 'package:fcrit_mart/screens/user/buyer_side/buyer_page.dart';
+import 'package:fcrit_mart/screens/user/my_orders.dart';
 import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
+import 'package:fcrit_mart/screens/user/sold_items.dart';
 import 'package:fcrit_mart/screens/user/user_cart/cart_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,7 +41,8 @@ class _FcritmartState extends State<Fcritmart> {
         Settings.id: (context) => const Settings(),
         Profilepage.id: (context) => const Profilepage(),
         MyCart.id: (context) => const MyCart(),
-        ProductPage.id: (context) => const ProductPage(),
+        MyOrders.id: (context) => const MyOrders(),
+        SoldOutItems.id: (context) => const SoldOutItems(),
       },
       theme: switchVal
           ? ThemeData.light()

@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 class BottomPopup extends StatefulWidget {
   const BottomPopup(
       {Key? key,
@@ -91,20 +93,24 @@ class _BottomPopupState extends State<BottomPopup>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'PRICE :  ' + widget.price,
-                          style: const TextStyle(
-                            color: Colors.cyanAccent,
-                            fontSize: 25,
-                            // fontFamily: 'PermanentMarker',
+                        Expanded(
+                          child: Text(
+                            'PRICE :  ' + widget.price,
+                            style: const TextStyle(
+                              color: Colors.cyanAccent,
+                              fontSize: 25,
+                              // fontFamily: 'PermanentMarker',
+                            ),
                           ),
                         ),
-                        Text(
-                          'MRP :  ' + widget.mrp,
-                          style: const TextStyle(
-                            color: Colors.cyanAccent,
-                            fontSize: 25,
-                            // fontFamily: 'PermanentMarker',
+                        Expanded(
+                          child: Text(
+                            'MRP :  ' + widget.mrp,
+                            style: const TextStyle(
+                              color: Colors.cyanAccent,
+                              fontSize: 25,
+                              // fontFamily: 'PermanentMarker',
+                            ),
                           ),
                         ),
                       ],
@@ -124,12 +130,23 @@ class _BottomPopupState extends State<BottomPopup>
                 ElevatedButton(
                   onPressed: () async {
                     // if(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('Cart').snapshots().con)
-                    productId = widget.id;
-                    if (await FirebaseFirestore.instance
-                        .collection('products')
-                        .snapshots()
-                        .contains(productId)) {
-                      FirebaseFirestore.instance
+                    // productId = widget.id;
+                    if (widget.ownerId !=
+                        FirebaseAuth.instance.currentUser?.uid) {
+                      // if (await _firestore
+                      //     .collection('products')
+                      //     .snapshots()
+                      //     .contains(widget.id)) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                              height: MediaQuery.of(context).size.height / 4,
+                              width: MediaQuery.of(context).size.height / 2,
+                              child: CircularProgressIndicator());
+                        },
+                      );
+                      await _firestore
                           .collection('users')
                           .doc(FirebaseAuth.instance.currentUser?.uid)
                           .collection('Cart')
@@ -143,9 +160,16 @@ class _BottomPopupState extends State<BottomPopup>
                         'id': widget.id,
                         'ownerId': widget.ownerId,
                       });
+                      Navigator.of(context).pop();
+                      Fluttertoast.showToast(
+                          msg: 'Item Added to cart Successfully');
+                      // } else {
+                      //   Fluttertoast.showToast(
+                      //       msg: 'Item Has been deleted by the user');
+                      // }
                     } else {
                       Fluttertoast.showToast(
-                          msg: 'Item Has been deleted by the user');
+                          msg: "You cannot add your own product to cart");
                     }
                   },
                   child: const Text(
@@ -155,7 +179,21 @@ class _BottomPopupState extends State<BottomPopup>
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, ProductPage.id);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ProductPage(
+                              imageUrl: widget.imageUrl,
+                              productName: widget.productName,
+                              mrp: widget.mrp,
+                              price: widget.price,
+                              description: widget.description,
+                              id: widget.id,
+                              ownerId: widget.ownerId);
+                        },
+                      ),
+                    );
                   },
                   child: const Text(
                     'See the item',

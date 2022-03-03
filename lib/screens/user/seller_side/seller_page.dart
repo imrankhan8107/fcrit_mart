@@ -1,5 +1,5 @@
 import 'package:fcrit_mart/constants.dart';
-import 'package:fcrit_mart/screens/user/seller_side/my_products.dart';
+import 'package:fcrit_mart/screens/user/seller_side/seller_homepage.dart';
 import 'package:flutter/material.dart';
 
 import 'add_product.dart';

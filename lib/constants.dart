@@ -1,8 +1,11 @@
 import 'package:fcrit_mart/screens/profile_page.dart';
 import 'package:fcrit_mart/screens/settings_page.dart';
+import 'package:fcrit_mart/screens/user/my_orders.dart';
+import 'package:fcrit_mart/screens/user/sold_items.dart';
 import 'package:fcrit_mart/screens/user/user_cart/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -79,17 +82,31 @@ class _AppDrawerState extends State<AppDrawer> {
               width: MediaQuery.of(context).size.width,
             ),
             ListTile(
-              leading: const Icon(CupertinoIcons.profile_circled),
+              leading: const Icon(FontAwesomeIcons.user),
               title: const Text('Profile'),
               onTap: () {
                 Navigator.pushNamed(context, Profilepage.id);
               },
             ),
             ListTile(
-              leading: const Icon(CupertinoIcons.cart_fill),
+              leading: const Icon(FontAwesomeIcons.shoppingCart),
               title: const Text('My cart'),
               onTap: () {
                 Navigator.pushNamed(context, MyCart.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.shoppingBag),
+              title: const Text('My Orders'),
+              onTap: () {
+                Navigator.pushNamed(context, MyOrders.id);
+              },
+            ),
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.shoppingBasket),
+              title: const Text('Sold Items'),
+              onTap: () {
+                Navigator.pushNamed(context, SoldOutItems.id);
               },
             ),
             ListTile(

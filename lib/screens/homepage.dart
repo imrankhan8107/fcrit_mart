@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage>
               const SizedBox(height: 30),
               AnimatedTextKit(
                 animatedTexts: [
+                  WavyAnimatedText('Hey There'),
                   RotateAnimatedText('Welcome'),
                   RotateAnimatedText('To'),
                   ColorizeAnimatedText(

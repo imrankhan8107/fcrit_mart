@@ -33,34 +33,45 @@ class _CardswithDetailsState extends State<CardswithDetails> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Card(
-        child: ListTile(
-          onTap: () {
-            showCupertinoModalPopup(
-              context: context,
-              builder: (context) {
-                return BottomPopup(
-                  imageUrl: widget.imageUrl,
-                  productName: widget.productname,
-                  mrp: widget.mrp,
-                  price: widget.price,
-                  description: widget.description,
-                  id: widget.productId,
-                  ownerId: widget.ownerid,
-                );
-              },
-            );
-          },
-          style: ListTileStyle.list,
-          leading: SizedBox(
-            width: MediaQuery.of(context).size.width / 4,
-            height: MediaQuery.of(context).size.height,
-            child: getImage(widget.imageUrl),
+      child: GestureDetector(
+        onTap: () {
+          showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return BottomPopup(
+                imageUrl: widget.imageUrl,
+                productName: widget.productname,
+                mrp: widget.mrp,
+                price: widget.price,
+                description: widget.description,
+                id: widget.productId,
+                ownerId: widget.ownerid,
+              );
+            },
+          );
+        },
+        child: Card(
+          child: Container(
+            height: MediaQuery.of(context).size.height / 6,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 6.5,
+                  child: getImage(widget.imageUrl),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(widget.productname.toUpperCase()),
+                    Text('PRICE: ' + widget.price)
+                  ],
+                ),
+                IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+              ],
+            ),
           ),
-          title: Text(widget.productname),
-          subtitle: Text(widget.price),
-          // trailing: Icon(Icons.more_vert),
-          // isThreeLine: true,
         ),
       ),
     );
