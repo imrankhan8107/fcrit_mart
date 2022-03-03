@@ -1,10 +1,10 @@
 import 'package:fcrit_mart/screens/profile_page.dart';
 import 'package:fcrit_mart/screens/settings_page.dart';
-import 'package:fcrit_mart/screens/user/cart_page.dart';
+import 'package:fcrit_mart/screens/user/user_cart/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-ShowSnackBar(String content, BuildContext context) {
+showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(content),
   ));
@@ -79,15 +79,15 @@ class _AppDrawerState extends State<AppDrawer> {
               width: MediaQuery.of(context).size.width,
             ),
             ListTile(
-              leading: Icon(CupertinoIcons.profile_circled),
-              title: Text('Profile'),
+              leading: const Icon(CupertinoIcons.profile_circled),
+              title: const Text('Profile'),
               onTap: () {
                 Navigator.pushNamed(context, Profilepage.id);
               },
             ),
             ListTile(
-              leading: Icon(CupertinoIcons.cart_fill),
-              title: Text('My cart'),
+              leading: const Icon(CupertinoIcons.cart_fill),
+              title: const Text('My cart'),
               onTap: () {
                 Navigator.pushNamed(context, MyCart.id);
               },

@@ -1,29 +1,126 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fcrit_mart/screens/user/seller_side/my_products.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../components/item_card.dart';
+
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+// final FirebaseInAppMessaging firebaseInAppMessaging =
+//     FirebaseInAppMessaging.instance;
 
-var imageUrl, productName, description, mrp, price, productId;
+var imageUrl, productName, description, mrp, price, productId, ownerId;
 
-class AllProductDetails extends StatelessWidget {
-  const AllProductDetails({
+class AllProductDetails extends StatefulWidget {
+  AllProductDetails({
     Key? key,
   }) : super(key: key);
-  // final String type;
+
+  @override
+  State<AllProductDetails> createState() => _AllProductDetailsState();
+}
+
+class _AllProductDetailsState extends State<AllProductDetails> {
+  bool sortInDescending = true;
+  String sortItemsBy = 'price';
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _firestore.collection('products').snapshots(),
+      stream: _firestore
+          .collection('products')
+          .orderBy(sortItemsBy, descending: sortInDescending)
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
           if (snapshot.hasData) {
             var product = snapshot.data.docs;
-            List<Widget> allProducts = [];
+            List<Widget> allProducts = [
+              TextButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Scaffold(
+                          appBar: AppBar(
+                            title: const Text(
+                              'Filter Options',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ),
+                          body: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      sortItemsBy = 'price';
+                                    });
+                                  },
+                                  child: const Text('price')),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      sortItemsBy = 'mrp';
+                                    });
+                                  },
+                                  child: Text('mrp')),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      sortItemsBy = 'publishTime';
+                                    });
+                                  },
+                                  child: Text('publishTime'))
+                            ],
+                          ),
+                          bottomSheet: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                sortInDescending
+                                    ? Text('Sorted in Descending')
+                                    : Text('Sorted in Ascending'),
+                                // Switch(
+                                //     value: sortInDescending,
+                                //     onChanged: (bool val) {
+                                //       setState(() {
+                                //         sortInDescending = val;
+                                //       });
+                                //     }),
+                                CupertinoSwitch(
+                                  value: sortInDescending,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      sortInDescending = value;
+                                      Navigator.of(context).pop();
+                                    });
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          sortItemsBy,
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        sortInDescending
+                            ? Icon(Icons.arrow_downward)
+                            : Icon(Icons.arrow_upward),
+                      ],
+                    ),
+                  ))
+            ];
             for (var item in product) {
               imageUrl = item.data()['file'];
               productName = item.data()['Name'];
@@ -31,6 +128,7 @@ class AllProductDetails extends StatelessWidget {
               mrp = item.data()['mrp'];
               price = item.data()['price'];
               productId = item.data()['id'];
+              ownerId = item.data()['owner'];
 
               final tile = CardswithDetails(
                 productname: productName,
@@ -39,12 +137,29 @@ class AllProductDetails extends StatelessWidget {
                 description: description,
                 price: price.toString(),
                 productId: productId,
+                ownerid: ownerId,
               );
+
               allProducts.add(tile);
             }
-            return ListView(
-              children: allProducts,
-            );
+            // return GridView.count(
+            //   clipBehavior: Clip.antiAlias,
+            //   primary: false,
+            //   padding: const EdgeInsets.all(20),
+            //   crossAxisSpacing: 10,
+            //   mainAxisSpacing: 10,
+            //   crossAxisCount: 2,
+            //   children: allProducts,
+            // );
+            return allProducts.isNotEmpty
+                ? ListView(
+                    children: allProducts,
+                  )
+                : const Center(
+                    child: Text(
+                    'Please Add Items',
+                    style: TextStyle(fontSize: 25, fontFamily: 'Lobster'),
+                  ));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -74,109 +189,6 @@ Image getImage(String imageurl) {
   );
 }
 
-class GetCartItems extends StatelessWidget {
-  GetCartItems({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _firestore
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .collection('Cart')
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: SizedBox(
-              height: 150,
-              width: 150,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          if (snapshot.hasData) {
-            var product = snapshot.data.docs;
-            List<Widget> cartProducts = [];
-            int totalAmount = 0;
-            for (var item in product) {
-              imageUrl = item.data()['imageUrl'];
-              productName = item.data()['productName'];
-              description = item.data()['description'];
-              mrp = item.data()['mrp'];
-              price = item.data()['price'];
-              productId = item.data()['id'];
-              totalAmount = totalAmount + int.parse(price);
-              print(totalAmount);
-
-              final tile = CartItemCards(
-                productname: productName,
-                mrp: mrp,
-                imageUrl: imageUrl,
-                price: price,
-                description: description,
-                productId: productId,
-              );
-              cartProducts.add(tile);
-            }
-            return ListView(
-              children: cartProducts +
-                  [
-                    totalAmount != 0
-                        ? Column(
-                            children: [
-                              Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 150, bottom: 20),
-                                  child: Text(
-                                    'Total Amount: $totalAmount',
-                                    style: const TextStyle(
-                                      fontFamily: 'Lobster',
-                                      fontSize: 30,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15.0, horizontal: 30),
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('PROCEED TO CHECKOUT'),
-                                  style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                      const EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 20),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical:
-                                    MediaQuery.of(context).size.height / 3,
-                                horizontal:
-                                    MediaQuery.of(context).size.width / 5),
-                            child: const Text(
-                              'No items added to Cart yet',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                  ],
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-        }
-        return const Divider(height: 0);
-      },
-    );
-  }
-}
-
 class CartItemCards extends StatefulWidget {
   const CartItemCards({
     Key? key,
@@ -202,60 +214,62 @@ class CartItemCards extends StatefulWidget {
 class _CartItemCardsState extends State<CartItemCards> {
   @override
   Widget build(BuildContext context) {
-    print('CartItemCards');
+    // print('CartItemCards');
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Card(
         child: ListTile(
           onTap: () {
             showDialog(
-                context: context,
-                builder: (context) {
-                  return CupertinoAlertDialog(
-                    title: Text(widget.productname),
-                    actions: [
-                      CupertinoDialogAction(
-                        child: Text('View Item'),
-                        onPressed: () {},
-                      ),
-                      CupertinoDialogAction(
-                        child: Text('Remove Item from Cart'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CupertinoAlertDialog(
-                                  title: Text('Remove?'),
-                                  actions: [
-                                    CupertinoDialogAction(
-                                      child: Text('Yes'),
-                                      onPressed: () {
-                                        //TODO: remove item from cart
-                                        _firestore
-                                            .collection('users')
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser?.uid)
-                                            .collection('Cart')
-                                            .doc(widget.productId)
-                                            .delete();
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    CupertinoDialogAction(
-                                      child: Text('NO'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        },
-                      ),
-                    ],
-                  );
-                });
+              context: context,
+              builder: (context) {
+                return CupertinoAlertDialog(
+                  title: Text(widget.productname),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('View Item'),
+                      onPressed: () {},
+                    ),
+                    CupertinoDialogAction(
+                      child: const Text('Remove Item from Cart'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: const Text('Remove?'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: const Text('Yes'),
+                                  onPressed: () {
+                                    //TODO: remove item from cart
+                                    _firestore
+                                        .collection('users')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser?.uid)
+                                        .collection('Cart')
+                                        .doc(widget.productId)
+                                        .delete();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  child: const Text('NO'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           },
           style: ListTileStyle.list,
           leading: SizedBox(

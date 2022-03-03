@@ -36,7 +36,7 @@ class _AddProductsState extends State<AddProducts> {
             title: const Text('Upload Image'),
             actions: [
               CupertinoDialogAction(
-                child: Text('Take a Photo'),
+                child: const Text('Take a Photo'),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   Uint8List image = await pickimage(ImageSource.camera);
@@ -89,13 +89,13 @@ class _AddProductsState extends State<AddProducts> {
                 },
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Textfieldinput(
                 textEditingController: _productname,
                 hinttext: 'Product Name',
                 textInputType: TextInputType.text,
                 maxlines: 1),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             _image != null
                 ? GestureDetector(
                     onTap: () async {
@@ -148,7 +148,7 @@ class _AddProductsState extends State<AddProducts> {
                       ),
                     ),
                   ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Textfieldinput(
                 textEditingController: _mrp,
                 hinttext: 'Actual Price of Product',

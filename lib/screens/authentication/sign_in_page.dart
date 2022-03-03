@@ -5,7 +5,6 @@ import 'package:fcrit_mart/flutterfire.dart';
 import 'package:fcrit_mart/screens/authentication/forgot_password_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
 import 'package:fcrit_mart/screens/homepage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -98,7 +97,7 @@ class _SignInState extends State<SignIn> {
                   String shouldnavigate =
                       await signIn(_emailField.text, _passwordField.text);
                   if (shouldnavigate == 'Yes') {
-                    ShowSnackBar('Sign-in Success', context);
+                    showSnackBar('Sign-in Success', context);
                     Navigator.pushReplacementNamed(context, HomePage.id);
                   } else {
                     Fluttertoast.showToast(msg: shouldnavigate);

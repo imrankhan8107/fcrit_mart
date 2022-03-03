@@ -18,7 +18,7 @@ Future<String> signIn(String email, String password) async {
         return 'User Not Found';
     }
     return 'NO';
-    print(e.code);
+    // print(e.code);
   }
 }
 
@@ -45,6 +45,13 @@ class Authmethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Future<model.User> getUserDetails() async{
+  //   User currentUser = _auth.currentUser!;
+  //
+  //   DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+  //   return model.User.fromSnap(snap);
+  // }
+
   //signup the user
   Future<String> signUpUser({
     required String email,
@@ -64,7 +71,7 @@ class Authmethods {
           email: email,
           password: password,
         );
-        print(cred.user?.uid);
+        // print(cred.user?.uid);
         // _auth.currentUser?.sendEmailVerification();
         model.User user = model.User(
           name: name,
@@ -150,7 +157,7 @@ class Authmethods {
         default:
           res = "An undefined Error happened.";
       }
-      print(e.code);
+      // print(e.code);
     }
     Fluttertoast.showToast(msg: res);
     return res;

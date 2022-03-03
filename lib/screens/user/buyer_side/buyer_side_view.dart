@@ -1,13 +1,14 @@
 import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/screens/user/get_product_details.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BuyersideHomepage extends StatelessWidget {
-  const BuyersideHomepage({Key? key}) : super(key: key);
+  BuyersideHomepage({Key? key}) : super(key: key);
+  final TextEditingController searchBox = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    List searchListResult = [];
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -28,7 +29,6 @@ class BuyersideHomepage extends StatelessWidget {
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
-                icon: Icon(FontAwesomeIcons.productHunt),
                 text: 'All products',
               ),
               Tab(
@@ -39,16 +39,22 @@ class BuyersideHomepage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            const AllProductDetails(),
+            AllProductDetails(),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: OutlineInputBorder(
-                    borderSide: Divider.createBorderSide(context),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: searchBox,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderSide: Divider.createBorderSide(context),
+                      ),
+                    ),
                   ),
-                ),
+                  // SearchResults(searchInput: searchBox.text),
+                ],
               ),
             ),
           ],
@@ -57,3 +63,47 @@ class BuyersideHomepage extends StatelessWidget {
     );
   }
 }
+
+// class SearchResults extends StatelessWidget {
+//   const SearchResults({Key? key, required this.searchInput}) : super(key: key);
+//   final String searchInput;
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder(
+//       stream: FirebaseFirestore.instance.collection('products').snapshots(),
+//       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+//         List<Widget> searchResults = [];
+//         if (snapshot.hasData) {
+//           var allItems = snapshot.data.docs;
+//           for (var item in allItems) {
+//             imageUrl = item.data()['file'];
+//             productName = item.data()['Name'];
+//             description = item.data()['description'];
+//             mrp = item.data()['mrp'];
+//             price = item.data()['price'];
+//             productId = item.data()['id'];
+//             ownerId = item.data()['owner'];
+//             String name = searchInput;
+//             for (name in productName) {
+//               print(name);
+//               final tile = CardswithDetails(
+//                 productname: productName,
+//                 mrp: mrp.toString(),
+//                 imageUrl: imageUrl,
+//                 description: description,
+//                 price: price.toString(),
+//                 productId: productId,
+//                 ownerid: ownerId,
+//               );
+//               searchResults.add(tile);
+//             }
+//           }
+//           return Column(
+//             children: searchResults,
+//           );
+//         }
+//         return Text('some error');
+//       },
+//     );
+//   }
+// }

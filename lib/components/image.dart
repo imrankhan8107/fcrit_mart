@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 pickimage(ImageSource source) async {
@@ -12,7 +13,7 @@ pickimage(ImageSource source) async {
   if (_file != null) {
     return await _file.readAsBytes();
   }
-  print('No image selected');
+  // print('No image selected');
 }
 
 class StorageMethods {
@@ -28,14 +29,36 @@ class StorageMethods {
     required String description,
     required String uniqueId,
   }) async {
+    DateTime currentTime = DateTime.now();
     String res = 'some error occured';
-    DocumentReference doc = _firestore.collection('products').doc(uniqueId);
+    DocumentReference allProductsDocRef =
+        _firestore.collection('products').doc(uniqueId);
+    DocumentReference myProductsDocRef = _firestore
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .collection('myProducts')
+        .doc(uniqueId);
     try {
       if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
-        await doc.set({
+        await allProductsDocRef.set({
+          'owner': _auth.currentUser?.uid,
+          'checkedOut': false,
           'Name': productName,
           'file': file,
           'description': description,
+          'publishTime': currentTime,
+          'mrp': mrp,
+          'price': price,
+          'id': uniqueId,
+        });
+
+        await myProductsDocRef.set({
+          'owner': _auth.currentUser?.uid,
+          'checkedOut': false,
+          'Name': productName,
+          'file': file,
+          'description': description,
+          'publishTime': currentTime,
           'mrp': mrp,
           'price': price,
           'id': uniqueId,
@@ -55,18 +78,19 @@ class StorageMethods {
     String res = "Error occurred while upload";
     try {
       Reference ref = _storage.ref().child(childname).child(uniqueId);
-      UploadTask uploadTask = ref.putData(file);
-      TaskSnapshot snap = await uploadTask;
-      String downloadurl = await snap.ref.getDownloadURL();
+      // UploadTask uploadTask = ref.putData(file);
+      // TaskSnapshot snap = await uploadTask;
+      // String downloadurl = await snap.ref.getDownloadURL();
       String url = await ref.putData(file).snapshot.ref.getDownloadURL();
       res = 'success';
-      print('res: $res');
-      print('downloadurl: $downloadurl');
+      Fluttertoast.showToast(msg: res);
+      // print('res: $res');
+      // print('downloadurl: $downloadurl');
       return url;
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       res = 'error occurred while upload';
-      print('res:$res');
+      // print('res:$res');
     }
     return 'https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg';
   }

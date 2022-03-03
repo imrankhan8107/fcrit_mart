@@ -15,9 +15,11 @@ class ForgotPass extends StatefulWidget {
 
 class _ForgotPassState extends State<ForgotPass> {
   final TextEditingController _emailid = TextEditingController();
+  // final TextEditingController _resetcode = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // bool showCodeInputBox = false;
     return Scaffold(
       appBar: AppBar(
         leading: Appbarbutton(
@@ -54,6 +56,7 @@ class _ForgotPassState extends State<ForgotPass> {
                     try {
                       await FirebaseAuth.instance
                           .sendPasswordResetEmail(email: _emailid.text);
+                      // FirebaseAuth.instance.checkActionCode()
                       Fluttertoast.showToast(
                           msg: 'An Email Has been sent to reset password');
                       Navigator.pushReplacementNamed(context, SignIn.id);
@@ -68,7 +71,7 @@ class _ForgotPassState extends State<ForgotPass> {
                     }
                   },
                   child: const Text('Get Email to reset password'),
-                )
+                ),
               ],
             ),
           ),
