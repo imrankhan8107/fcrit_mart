@@ -5,9 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../components/bottom_popup.dart';
-import '../../../constants.dart';
-import '../../see_product.dart';
+import '../../../constantse_product.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -266,13 +264,13 @@ class _MyProductCardsState extends State<MyProductCards> {
 class MyProductPopUp extends StatefulWidget {
   const MyProductPopUp(
       {Key? key,
-        required this.imageUrl,
-        required this.productName,
-        required this.mrp,
-        required this.price,
-        required this.description,
-        required this.id,
-        required this.ownerId})
+      required this.imageUrl,
+      required this.productName,
+      required this.mrp,
+      required this.price,
+      required this.description,
+      required this.id,
+      required this.ownerId})
       : super(key: key);
   final String imageUrl;
   final String productName;
@@ -381,7 +379,7 @@ class _MyProductPopUpState extends State<MyProductPopUp>
                 ElevatedButton(
                   onPressed: () {
                     // if(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('Cart').snapshots().con)
-                   //TODO:add a new page inorder to make user able to update details
+                    //TODO:add a new page inorder to make user able to update details
                     // FirebaseFirestore.instance
                     //     .collection('users')
                     //     .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -405,7 +403,6 @@ class _MyProductPopUpState extends State<MyProductPopUp>
                 ElevatedButton(
                   onPressed: () {
                     // Navigator.pushNamed(context, ProductPage.id);
-
                   },
                   child: const Text(
                     'Delete Item',
