@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
 
 import '../get_product_details.dart';
 import 'carts_items_cards.dart';
 
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+// final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class GetCartItems extends StatefulWidget {
@@ -23,22 +23,22 @@ class _GetCartItemsState extends State<GetCartItems> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPermissions();
+    // getPermissions();
   }
 
-  void getPermissions() async {
-    NotificationSettings settings = await firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    print('User granted permission: ${settings.authorizationStatus}');
-  }
+  // void getPermissions() async {
+  //   NotificationSettings settings = await firebaseMessaging.requestPermission(
+  //     alert: true,
+  //     announcement: false,
+  //     badge: true,
+  //     carPlay: false,
+  //     criticalAlert: false,
+  //     provisional: false,
+  //     sound: true,
+  //   );
+  //
+  //   print('User granted permission: ${settings.authorizationStatus}');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,50 +126,95 @@ class _GetCartItemsState extends State<GetCartItems> {
                                     //TODO: make an new collection named ORDERS and add a unique order id and ordertime along with buyer and sellers uids and then show contact details of seller to buyer and remove product from all products and add to soldout subcollection of seller and purchased subcollection of buyer
                                     for (var element in cartProducts) {
                                       if (ownerId != currentUserUid) {
+                                        // showDialog(
+                                        //     context: context,
+                                        //     builder: (context) {
+                                        //       return Center(
+                                        //         child:
+                                        //             CircularProgressIndicator(),
+                                        //       );
+                                        //     });
                                         String _uid = const Uuid().v1();
-                                        _firestore
-                                            .collection('order')
-                                            .doc(productId)
-                                            .set({
-                                          'orderId': _uid,
-                                          'checkoutTime': DateTime.now(),
-                                          'sellerId': ownerId,
-                                          'buyerId': FirebaseAuth
-                                              .instance.currentUser!.uid,
-                                          'productName': productName,
-                                          'productId': productId,
-                                          'description': description,
-                                          'imageUrl': imageUrl,
-                                          'mrp': mrp,
-                                          'price': price,
-                                        });
-                                        if (ownerId ==
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid) {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                      'Product Checked Out'),
-                                                  content: Text(
-                                                      'Your Product $productName has been checked out.\nPlease check Sold items.'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text('OK'),
-                                                    )
-                                                  ],
-                                                );
-                                              });
+                                        DocumentSnapshot snapshot =
+                                            await _firestore
+                                                .collection('users')
+                                                .doc(ownerId)
+                                                .get();
+                                        var snap = snapshot.data()
+                                            as Map<String, dynamic>;
+                                        final Email email = Email(
+                                          body:
+                                              'Your product $productName  has been checked out. Please check SOLD OUT section to get more details in the App',
+                                          subject: 'CheckOut Details',
+                                          recipients: ['${snap['email']}'],
+                                          // cc: ['cc@example.com'],
+                                          // bcc: ['bcc@example.com'],
+                                          // attachmentPaths: [
+                                          //   '/path/to/attachment.zip'
+                                          // ],
+                                          isHTML: false,
+                                        );
+
+                                        await FlutterEmailSender.send(email);
+
+                                        try {
+                                          Fluttertoast.showToast(
+                                              msg: 'Order Success');
+                                          _firestore
+                                              .collection('order')
+                                              .doc(productId)
+                                              .set({
+                                            'orderId': _uid,
+                                            'checkoutTime': DateTime.now(),
+                                            'sellerId': ownerId,
+                                            'buyerId': FirebaseAuth
+                                                .instance.currentUser!.uid,
+                                            'productName': productName,
+                                            'productId': productId,
+                                            'description': description,
+                                            'imageUrl': imageUrl,
+                                            'mrp': mrp,
+                                            'price': price,
+                                          });
+                                          // if (ownerId ==
+                                          //     FirebaseAuth
+                                          //         .instance.currentUser!.uid) {
+                                          //   showDialog(
+                                          //       context: context,
+                                          //       builder: (context) {
+                                          //         return AlertDialog(
+                                          //           title: const Text(
+                                          //               'Product Checked Out'),
+                                          //           content: Text(
+                                          //               'Your Product $productName has been checked out.\nPlease check Sold items.'),
+                                          //           actions: [
+                                          //             TextButton(
+                                          //               onPressed: () {
+                                          //                 Navigator.of(context)
+                                          //                     .pop();
+                                          //               },
+                                          //               child: const Text('OK'),
+                                          //             )
+                                          //           ],
+                                          //         );
+                                          //       });
+                                          // }
+                                          _firestore
+                                              .collection('users')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser?.uid)
+                                              .collection('Cart')
+                                              .doc(productId)
+                                              .delete();
+                                          _firestore
+                                              .collection('products')
+                                              .doc(productId)
+                                              .delete();
+                                        } catch (e) {
+                                          print(e.toString());
+                                          Fluttertoast.showToast(
+                                              msg: 'Order Unsuccessful');
                                         }
-                                        _firestore
-                                            .collection('products')
-                                            .doc(productId)
-                                            .delete();
                                       } else {
                                         Fluttertoast.showToast(
                                           msg:

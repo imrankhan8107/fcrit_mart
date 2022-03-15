@@ -47,8 +47,7 @@ class _MyOrdersState extends State<MyOrders> {
                 var sellerId = item.data()['sellerId'];
                 var ownerId = item.data()['buyerId'];
 
-                final myOrderTile = ListTile(
-                  title: Text(productName),
+                final myOrderTile = GestureDetector(
                   onTap: () async {
                     DocumentSnapshot documentSnapshot = await _firestore
                         .collection('users')
@@ -63,17 +62,21 @@ class _MyOrdersState extends State<MyOrders> {
                           actions: [
                             CupertinoDialogAction(
                               onPressed: () {},
-                              child: Text(snap['username']),
+                              child: Text(
+                                  snap['username'].toString().toUpperCase()),
                             ),
                             CupertinoDialogAction(
                               onPressed: () {
                                 launch(
-                                    'https://www.gmail.com${snap['email'].toString()}');
+                                    'mailto:${snap['email']}?subject=Your%20Product%20Has%20been%20checked%20out&body=Hello%20World');
+                                // launch(
+                                //     'https://www.gmail.com${snap['email'].toString()}');
                               },
-                              child: Text(snap['email']),
+                              child: Text('EMAIL:  ${snap['email']}'),
                             ),
                             CupertinoDialogAction(
-                              child: Text(snap['mobileno'].toString()),
+                              child: Text(
+                                  'Mobile No. :  ${snap['mobileno'].toString()}'),
                               onPressed: () {
                                 launch(
                                     'https://wa.me/+91${snap['mobileno'].toString()}');
@@ -84,6 +87,21 @@ class _MyOrdersState extends State<MyOrders> {
                       },
                     );
                   },
+                  child: Card(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      height: 120,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          getImage(imageUrl),
+                          Text(productName.toString().toUpperCase()),
+                          Text('PRICE: $price'),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
                 myOrders.add(myOrderTile);
               }

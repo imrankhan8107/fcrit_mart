@@ -39,14 +39,14 @@ class _AllProductDetailsState extends State<AllProductDetails> {
     );
   }
 
-  void productInOrders(String id) async {
-    bool containsItem =
-        await _firestore.collection('order').snapshots().contains(id);
-    setState(() {
-      itemInOrders = containsItem;
-      print(containsItem);
-    });
-  }
+  // void productInOrders(String id) async {
+  //   bool containsItem =
+  //       await _firestore.collection('order').snapshots().contains(id);
+  //   setState(() {
+  //     itemInOrders = containsItem;
+  //     print(containsItem);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +168,7 @@ class _AllProductDetailsState extends State<AllProductDetails> {
                   )
                 : const Center(
                     child: Text(
-                    'Please Add Items',
+                    'No Items Added Yet',
                     style: TextStyle(fontSize: 25, fontFamily: 'Lobster'),
                   ));
           } else if (snapshot.hasError) {
