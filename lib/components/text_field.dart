@@ -8,6 +8,7 @@ class Textfieldinput extends StatelessWidget {
     required this.hinttext,
     required this.textInputType,
     required this.maxlines,
+    this.initialText,
   }) : super(key: key);
 
   final TextEditingController textEditingController;
@@ -15,6 +16,7 @@ class Textfieldinput extends StatelessWidget {
   final String hinttext;
   final TextInputType textInputType;
   final int maxlines;
+  final String? initialText;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,8 @@ class Textfieldinput extends StatelessWidget {
         //     return 'Please enter some value';
         //   }
         // },
+        autofocus: true,
+        initialValue: initialText,
         maxLines: maxlines,
         controller: textEditingController,
         obscuringCharacter: '*',

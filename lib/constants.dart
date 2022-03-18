@@ -1,8 +1,9 @@
+import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:fcrit_mart/screens/profile_page.dart';
-import 'package:fcrit_mart/screens/settings_page.dart';
 import 'package:fcrit_mart/screens/user/my_orders.dart';
 import 'package:fcrit_mart/screens/user/sold_items.dart';
 import 'package:fcrit_mart/screens/user/user_cart/cart_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -110,10 +111,37 @@ class _AppDrawerState extends State<AppDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(CupertinoIcons.settings),
-              title: const Text('Settings'),
+              leading: const Icon(FontAwesomeIcons.signOutAlt),
+              title: const Text('Sign Out'),
               onTap: () {
-                Navigator.pushNamed(context, Settings.id);
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text('Sign Out'),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text('YES'),
+                            onPressed: () {
+                              FirebaseAuth.instance.signOut();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignIn(),
+                                ),
+                                ModalRoute.withName(SignIn.id),
+                              );
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text('NO'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    });
               },
             ),
           ],

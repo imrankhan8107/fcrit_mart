@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fcrit_mart/components/appbar_button.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -39,10 +41,15 @@ class _ProductPageState extends State<ProductPage> {
         title: Text(
           widget.productName,
           style: const TextStyle(
-            letterSpacing: 5,
+            letterSpacing: 2,
             fontFamily: 'PermanentMarker',
-            fontSize: 30,
+            fontSize: 25,
           ),
+        ),
+        leading: Appbarbutton(
+          ontapAppbar: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: ListView(
@@ -53,39 +60,73 @@ class _ProductPageState extends State<ProductPage> {
             height: MediaQuery.of(context).size.height / 2,
           ),
           const SizedBox(
-            height: 5,
+            height: 15,
           ),
-          Text(
-            'PRODUCT NAME:    ' + widget.productName.toUpperCase(),
-            style: const TextStyle(fontSize: 25, fontFamily: 'PermanentMarker'),
+          Row(
+            children: [
+              Text(
+                'PRODUCT NAME:    ',
+                style: const TextStyle(
+                    color: Colors.lightBlueAccent,
+                    fontSize: 18,
+                    fontFamily: 'Lobster',
+                    letterSpacing: 2),
+              ),
+              Expanded(
+                  child: Text(
+                widget.productName.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'PermanentMarker',
+                    color: Colors.lightBlueAccent),
+              ))
+            ],
           ),
           const SizedBox(
-            height: 5,
+            height: 20,
           ),
           Text('Price:  ' + widget.price,
-              style: const TextStyle(fontSize: 25, fontFamily: 'Lobster')),
+              style: const TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Lobster',
+                  color: Colors.redAccent)),
           const SizedBox(
-            height: 5,
+            height: 10,
           ),
           Text('MRP:  ' + widget.mrp,
-              style: const TextStyle(fontSize: 25, fontFamily: 'Lobster')),
+              style: const TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Lobster',
+                  color: Colors.lightGreenAccent)),
           const SizedBox(
             height: 10,
           ),
-          Text('You Saved: $percentSave%'),
+          Text(
+            'You Saved: ${percentSave.toStringAsFixed(2)}%',
+            style: TextStyle(
+                fontSize: 20, fontFamily: 'Lobster', color: Colors.cyanAccent),
+          ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           Text(
             'DESCRIPTION:\n' + widget.description,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20, color: Colors.tealAccent),
           ),
           GestureDetector(
             onTap: () async {
-              if (await FirebaseFirestore.instance
-                  .collection('products')
-                  .snapshots()
-                  .contains(widget.id)) {
+              if (widget.ownerId != FirebaseAuth.instance.currentUser!.uid) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Center(
+                        child: SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    });
                 FirebaseFirestore.instance
                     .collection('users')
                     .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -100,9 +141,11 @@ class _ProductPageState extends State<ProductPage> {
                   'id': widget.id,
                   'ownerId': widget.ownerId,
                 });
+                Navigator.of(context).pop();
               } else {
+                Navigator.of(context).pop();
                 Fluttertoast.showToast(
-                    msg: 'Item Has been deleted by the user');
+                    msg: 'You cannot add your \nown item to Cart');
               }
             },
             child: Padding(

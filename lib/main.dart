@@ -4,7 +4,6 @@ import 'package:fcrit_mart/screens/authentication/sign_in_page.dart';
 import 'package:fcrit_mart/screens/authentication/sign_up_page.dart';
 import 'package:fcrit_mart/screens/homepage.dart';
 import 'package:fcrit_mart/screens/profile_page.dart';
-import 'package:fcrit_mart/screens/settings_page.dart';
 import 'package:fcrit_mart/screens/user/buyer_side/buyer_page.dart';
 import 'package:fcrit_mart/screens/user/my_orders.dart';
 import 'package:fcrit_mart/screens/user/seller_side/seller_page.dart';
@@ -17,6 +16,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const Fcritmart());
 }
 
@@ -38,7 +38,6 @@ class _FcritmartState extends State<Fcritmart> {
         Buyerpage.id: (context) => const Buyerpage(),
         Sellerpage.id: (context) => const Sellerpage(),
         ForgotPass.id: (context) => const ForgotPass(),
-        Settings.id: (context) => const Settings(),
         Profilepage.id: (context) => const Profilepage(),
         MyCart.id: (context) => const MyCart(),
         MyOrders.id: (context) => const MyOrders(),

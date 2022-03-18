@@ -82,12 +82,19 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 searchResults.add(tile);
               }
-              return ListView(
-                children: searchResults,
-              );
+              return searchResults.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Items Found',
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    )
+                  : ListView(
+                      children: searchResults,
+                    );
             }
           }
-          return Center(child: Text('Search Products'));
+          return const Center(child: Text('Search Products'));
         },
       ),
     );

@@ -174,16 +174,19 @@ class _AddProductsState extends State<AddProducts> {
               onTap: () async {
                 try {
                   showDialog(
-                      context: context,
-                      builder: (context) {
-                        return uploading
-                            ? Container(
+                    context: context,
+                    builder: (context) {
+                      return uploading
+                          ? const Center(
+                              child: SizedBox(
                                 height: 200,
                                 width: 200,
                                 child: CircularProgressIndicator(),
-                              )
-                            : Divider(height: 0);
-                      });
+                              ),
+                            )
+                          : const Divider(height: 0);
+                    },
+                  );
                   var uuid = const Uuid();
                   String productId = uuid.v4();
                   if (FirebaseAuth.instance.currentUser?.isAnonymous != true &&

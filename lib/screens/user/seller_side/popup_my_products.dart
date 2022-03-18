@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcrit_mart/constants.dart';
 import 'package:fcrit_mart/screens/user/get_product_details.dart';
+import 'package:fcrit_mart/screens/user/seller_side/update_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MyProductPopUp extends StatefulWidget {
   const MyProductPopUp({
@@ -40,6 +43,10 @@ class _MyProductPopUpState extends State<MyProductPopUp> {
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.clear),
+            ),
+            title: Text(
+              widget.productName.toUpperCase(),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           bottomSheet: BottomSheet(
@@ -135,6 +142,18 @@ class _MyProductPopUpState extends State<MyProductPopUp> {
                     //   'id': widget.id,
                     //   'ownerId': widget.ownerId,
                     // });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdateItemDetails(
+                                  description: widget.description,
+                                  price: widget.price,
+                                  imageUrl: widget.imageUrl,
+                                  productName: widget.productName,
+                                  mrp: widget.mrp,
+                                  ownerId: widget.ownerId,
+                                  productId: widget.id,
+                                )));
                   },
                   child: const Text(
                     'Update details',
@@ -161,11 +180,27 @@ class _MyProductPopUpState extends State<MyProductPopUp> {
                             actions: [
                               CupertinoDialogAction(
                                 child: Text('Yes'),
-                                onPressed: () {},
+                                onPressed: () {
+                                  try {
+                                    FirebaseFirestore.instance
+                                        .collection('products')
+                                        .doc(widget.id)
+                                        .delete();
+                                    Fluttertoast.showToast(
+                                        msg: 'Item deleted successfully');
+                                    Navigator.of(context).pop();
+                                  } catch (e) {
+                                    print(e);
+                                    Fluttertoast.showToast(
+                                        msg: 'Item deletion unsuccessful');
+                                  }
+                                },
                               ),
                               CupertinoDialogAction(
                                 child: Text('NO'),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
                             ],
                           );

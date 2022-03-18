@@ -54,21 +54,22 @@ class _CardswithDetailsState extends State<CardswithDetails> {
           child: Container(
             height: MediaQuery.of(context).size.height / 6,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
                   height: MediaQuery.of(context).size.height / 6.5,
                   child: getImage(widget.imageUrl),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(widget.productname.toUpperCase()),
-                    Text('PRICE: ' + widget.price)
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(widget.productname.toUpperCase()),
+                      Text('PRICE: ' + widget.price)
+                    ],
+                  ),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
               ],
             ),
           ),

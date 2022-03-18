@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../components/appbar_button.dart';
 import 'get_product_details.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -109,6 +110,11 @@ class _MyOrdersState extends State<MyOrders> {
                   ? Scaffold(
                       appBar: AppBar(
                         title: Text('My Orders'),
+                        leading: Appbarbutton(
+                          ontapAppbar: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
                       ),
                       body: SafeArea(
                         child: ListView(
@@ -121,6 +127,11 @@ class _MyOrdersState extends State<MyOrders> {
                         title: const Text(
                           'Order Page',
                           style: TextStyle(fontSize: 30, fontFamily: 'Lobster'),
+                        ),
+                        leading: Appbarbutton(
+                          ontapAppbar: () {
+                            Navigator.of(context).pop();
+                          },
                         ),
                       ),
                       body: Center(

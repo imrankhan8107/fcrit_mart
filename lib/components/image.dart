@@ -44,11 +44,7 @@ class StorageMethods {
 
     DocumentReference allProductsDocRef =
         _firestore.collection('products').doc(uniqueId);
-    // DocumentReference myProductsDocRef = _firestore
-    //     .collection('users')
-    //     .doc(_auth.currentUser!.uid)
-    //     .collection('myProducts')
-    //     .doc(uniqueId);
+
     try {
       if (file.isNotEmpty && productName.isNotEmpty && description.isNotEmpty) {
         await allProductsDocRef.set({
@@ -64,17 +60,6 @@ class StorageMethods {
           'id': uniqueId,
         });
 
-        // await myProductsDocRef.set({
-        //   'owner': _auth.currentUser?.uid,
-        //   'checkedOut': false,
-        //   'Name': productName.toLowerCase(),
-        //   'file': file,
-        //   'description': description,
-        //   'publishTime': currentTime,
-        //   'mrp': mrp,
-        //   'price': price,
-        //   'id': uniqueId,
-        // });
         res = 'success';
       }
       return res;

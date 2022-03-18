@@ -3,22 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../see_product.dart';
 import '../get_product_details.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class CartItemCards extends StatefulWidget {
-  const CartItemCards({
-    Key? key,
-    required this.productname,
-    required this.mrp,
-    required this.imageUrl,
-    required this.price,
-    required this.description,
-    required this.productId,
-  }) : super(key: key);
+  const CartItemCards(
+      {Key? key,
+      required this.productname,
+      required this.mrp,
+      required this.imageUrl,
+      required this.price,
+      required this.description,
+      required this.productId,
+      required this.ownerId})
+      : super(key: key);
 
   final String productname;
+  final String ownerId;
   final String mrp;
   final String price;
   final String imageUrl;
@@ -45,7 +48,19 @@ class _CartItemCardsState extends State<CartItemCards> {
                 actions: [
                   CupertinoDialogAction(
                     child: const Text('View Item'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                  imageUrl: widget.imageUrl,
+                                  productName: widget.productname,
+                                  mrp: widget.mrp,
+                                  price: widget.price,
+                                  description: widget.description,
+                                  id: widget.productId,
+                                  ownerId: widget.ownerId)));
+                    },
                   ),
                   CupertinoDialogAction(
                     child: const Text('Remove Item from Cart'),
@@ -97,13 +112,14 @@ class _CartItemCardsState extends State<CartItemCards> {
                 height: MediaQuery.of(context).size.height / 5,
                 child: getImage(widget.imageUrl),
               ),
-              Column(
-                children: [
-                  Text(widget.productname.toUpperCase()),
-                  Text('PRICE: ' + widget.price)
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(widget.productname.toUpperCase()),
+                    Text('PRICE: ' + widget.price)
+                  ],
+                ),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
             ],
           ),
         ),

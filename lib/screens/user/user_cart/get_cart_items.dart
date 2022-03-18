@@ -20,27 +20,6 @@ class GetCartItems extends StatefulWidget {
 
 class _GetCartItemsState extends State<GetCartItems> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // getPermissions();
-  }
-
-  // void getPermissions() async {
-  //   NotificationSettings settings = await firebaseMessaging.requestPermission(
-  //     alert: true,
-  //     announcement: false,
-  //     badge: true,
-  //     carPlay: false,
-  //     criticalAlert: false,
-  //     provisional: false,
-  //     sound: true,
-  //   );
-  //
-  //   print('User granted permission: ${settings.authorizationStatus}');
-  // }
-
-  @override
   Widget build(BuildContext context) {
     String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     return StreamBuilder(
@@ -82,6 +61,7 @@ class _GetCartItemsState extends State<GetCartItems> {
                 price: price,
                 description: description,
                 productId: productId,
+                ownerId: ownerId,
               );
               cartProducts.add(tile);
             }

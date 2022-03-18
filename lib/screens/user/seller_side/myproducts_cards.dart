@@ -57,7 +57,7 @@ class _MyProductCardsState extends State<MyProductCards> {
             height: MediaQuery.of(context).size.height,
             child: getImage(widget.imageUrl),
           ),
-          title: Text(widget.productname),
+          title: Text(widget.productname.toUpperCase()),
           subtitle: Text(widget.price),
           // isThreeLine: true,
         ),

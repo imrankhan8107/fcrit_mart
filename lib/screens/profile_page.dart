@@ -67,7 +67,8 @@ class _ProfilepageState extends State<Profilepage> {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            detailsinRow(CupertinoIcons.person_crop_circle, 'Name', Name),
+            detailsinRow(
+                CupertinoIcons.person_crop_circle, 'Name', Name.toUpperCase()),
             detailsinRow(CupertinoIcons.mail_solid, 'Email', email),
             detailsinRow(
                 FontAwesomeIcons.mobile, 'Mobile Number', '+91$mobilenumber'),

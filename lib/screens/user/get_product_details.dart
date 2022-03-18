@@ -57,7 +57,9 @@ class _AllProductDetailsState extends State<AllProductDetails> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(
+              child: SizedBox(
+                  height: 200, width: 200, child: CircularProgressIndicator()));
         } else {
           if (snapshot.hasData) {
             var product = snapshot.data.docs;
