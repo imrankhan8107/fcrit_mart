@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage>
                   RotateAnimatedText('To'),
                   ColorizeAnimatedText(
                     'Fcrit Mart',
-                    speed: const Duration(seconds: 2),
+                    speed: const Duration(seconds: 1),
                     colors: [
                       Colors.redAccent,
                       Colors.yellowAccent,

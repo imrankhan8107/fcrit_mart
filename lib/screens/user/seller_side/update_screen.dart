@@ -128,15 +128,16 @@ class _UpdateItemDetailsState extends State<UpdateItemDetails> {
                       msg: 'Price cannot be Greater than MRP');
                 } else {
                   showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const Center(
-                          child: SizedBox(
-                              height: 200,
-                              width: 200,
-                              child: CircularProgressIndicator()),
-                        );
-                      });
+                    context: context,
+                    builder: (context) {
+                      return const Center(
+                        child: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: CircularProgressIndicator()),
+                      );
+                    },
+                  );
                   FirebaseFirestore.instance
                       .collection('products')
                       .doc(widget.productId)

@@ -93,9 +93,15 @@ class _SoldOutItemsState extends State<SoldOutItems> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          getImage(imageUrl),
-                          Text(productName.toString().toUpperCase()),
-                          Text('PRICE: $price'),
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: getImage(imageUrl),
+                          ),
+                          Expanded(
+                              flex: 2,
+                              child:
+                                  Text(productName.toString().toUpperCase())),
+                          Expanded(child: Text('PRICE: $price')),
                         ],
                       ),
                     ),

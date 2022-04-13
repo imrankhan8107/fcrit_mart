@@ -63,7 +63,7 @@ class _MyOrdersState extends State<MyOrders> {
                           actions: [
                             CupertinoDialogAction(
                               onPressed: () {},
-                              child: Text(
+                              child: Text('NAME' +
                                   snap['username'].toString().toUpperCase()),
                             ),
                             CupertinoDialogAction(
@@ -96,8 +96,13 @@ class _MyOrdersState extends State<MyOrders> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          getImage(imageUrl),
-                          Text(productName.toString().toUpperCase()),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: getImage(imageUrl),
+                          ),
+                          Expanded(
+                              child:
+                                  Text(productName.toString().toUpperCase())),
                           Text('PRICE: $price'),
                         ],
                       ),

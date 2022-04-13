@@ -143,7 +143,11 @@ class _BottomPopupState extends State<BottomPopup>
                           return SizedBox(
                               height: MediaQuery.of(context).size.height / 4,
                               width: MediaQuery.of(context).size.height / 2,
-                              child: CircularProgressIndicator());
+                              child: Center(
+                                  child: SizedBox(
+                                      height: 200,
+                                      width: 200,
+                                      child: CircularProgressIndicator())));
                         },
                       );
                       await _firestore

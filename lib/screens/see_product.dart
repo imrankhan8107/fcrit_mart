@@ -115,19 +115,25 @@ class _ProductPageState extends State<ProductPage> {
           ),
           GestureDetector(
             onTap: () async {
-              if (widget.ownerId != FirebaseAuth.instance.currentUser!.uid) {
+              if (widget.ownerId != FirebaseAuth.instance.currentUser?.uid) {
+                // if (await _firestore
+                //     .collection('products')
+                //     .snapshots()
+                //     .contains(widget.id)) {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Center(
-                        child: SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    });
-                FirebaseFirestore.instance
+                  context: context,
+                  builder: (context) {
+                    return SizedBox(
+                        height: MediaQuery.of(context).size.height / 4,
+                        width: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                            child: SizedBox(
+                                height: 200,
+                                width: 200,
+                                child: CircularProgressIndicator())));
+                  },
+                );
+                await FirebaseFirestore.instance
                     .collection('users')
                     .doc(FirebaseAuth.instance.currentUser?.uid)
                     .collection('Cart')
@@ -142,10 +148,14 @@ class _ProductPageState extends State<ProductPage> {
                   'ownerId': widget.ownerId,
                 });
                 Navigator.of(context).pop();
+                Fluttertoast.showToast(msg: 'Item Added to cart Successfully');
+                // } else {
+                //   Fluttertoast.showToast(
+                //       msg: 'Item Has been deleted by the user');
+                // }
               } else {
-                Navigator.of(context).pop();
                 Fluttertoast.showToast(
-                    msg: 'You cannot add your \nown item to Cart');
+                    msg: "You cannot add your own product to cart");
               }
             },
             child: Padding(
