@@ -88,48 +88,55 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      body: Center(
-        child: DefaultTextStyle(
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 5),
-              Hero(
-                tag: 'logo',
-                child: Image.asset(
-                  'images/fcritlogo.png',
-                  height: MediaQuery.of(context).size.height / 3,
-                ),
-              ),
-              const SizedBox(height: 30),
-              AnimatedTextKit(
-                animatedTexts: [
-                  WavyAnimatedText('Hey There'),
-                  RotateAnimatedText('Welcome'),
-                  RotateAnimatedText('To'),
-                  ColorizeAnimatedText(
-                    'Fcrit Mart',
-                    speed: const Duration(seconds: 1),
-                    colors: [
-                      Colors.redAccent,
-                      Colors.yellowAccent,
-                      Colors.green,
-                      Colors.pink,
-                      Colors.orange,
-                      Colors.lightBlueAccent,
-                    ],
-                    textStyle: const TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.w900,
+      body: ListView(
+        children: [
+          Center(
+            child: DefaultTextStyle(
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height / 5),
+                  Hero(
+                    tag: 'logo',
+                    child: Image.asset(
+                      'images/fcritlogo.png',
+                      height: MediaQuery.of(context).size.height / 3,
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 30),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      WavyAnimatedText('Hey There',
+                          speed: Duration(milliseconds: 200)),
+                      RotateAnimatedText('Welcome',
+                          duration: Duration(milliseconds: 200)),
+                      RotateAnimatedText('To',
+                          duration: Duration(milliseconds: 200)),
+                      ColorizeAnimatedText(
+                        'Fcrit Mart',
+                        speed: const Duration(milliseconds: 200),
+                        colors: [
+                          Colors.redAccent,
+                          Colors.yellowAccent,
+                          Colors.green,
+                          Colors.pink,
+                          Colors.orange,
+                          Colors.lightBlueAccent,
+                        ],
+                        textStyle: const TextStyle(
+                          fontSize: 60,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

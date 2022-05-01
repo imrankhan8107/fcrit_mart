@@ -24,12 +24,14 @@ class _AllProductDetailsState extends State<AllProductDetails> {
   bool sortInDescending = true;
   String sortItemsBy = 'price';
   bool itemInOrders = false;
+  String filterButtonText = 'price';
 
   Widget filterButton(String filterBy, String buttonText) {
     return TextButton(
       onPressed: () {
         setState(() {
           sortItemsBy = filterBy;
+          filterButtonText = buttonText;
         });
       },
       child: Text(
@@ -81,7 +83,7 @@ class _AllProductDetailsState extends State<AllProductDetails> {
                           children: [
                             filterButton('price', 'PRICE'),
                             filterButton('mrp', 'MRP'),
-                            filterButton('publishTime', 'Time'),
+                            filterButton('publishTime', 'TIME'),
                           ],
                         ),
                         bottomSheet: Padding(
@@ -122,7 +124,7 @@ class _AllProductDetailsState extends State<AllProductDetails> {
                   child: Row(
                     children: [
                       Text(
-                        sortItemsBy.toUpperCase(),
+                        filterButtonText.toUpperCase(),
                         style: const TextStyle(fontSize: 17),
                       ),
                       sortInDescending

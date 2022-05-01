@@ -103,7 +103,6 @@ class _GetCartItemsState extends State<GetCartItems> {
                                     // firebaseMessaging.sendMessage(
                                     //   to: refreshtoken,
                                     // );
-                                    //TODO: make an new collection named ORDERS and add a unique order id and ordertime along with buyer and sellers uids and then show contact details of seller to buyer and remove product from all products and add to soldout subcollection of seller and purchased subcollection of buyer
                                     for (var element in cartProducts) {
                                       if (ownerId != currentUserUid) {
                                         // showDialog(
@@ -127,11 +126,6 @@ class _GetCartItemsState extends State<GetCartItems> {
                                               'Your product $productName  has been checked out. Please check SOLD OUT section to get more details in the App',
                                           subject: 'CheckOut Details',
                                           recipients: ['${snap['email']}'],
-                                          // cc: ['cc@example.com'],
-                                          // bcc: ['bcc@example.com'],
-                                          // attachmentPaths: [
-                                          //   '/path/to/attachment.zip'
-                                          // ],
                                           isHTML: false,
                                         );
 

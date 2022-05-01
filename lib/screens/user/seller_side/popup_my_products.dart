@@ -186,9 +186,10 @@ class _MyProductPopUpState extends State<MyProductPopUp> {
                                         .collection('products')
                                         .doc(widget.id)
                                         .delete();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
                                     Fluttertoast.showToast(
                                         msg: 'Item deleted successfully');
-                                    Navigator.of(context).pop();
                                   } catch (e) {
                                     print(e);
                                     Fluttertoast.showToast(

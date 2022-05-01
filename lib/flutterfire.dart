@@ -15,7 +15,7 @@ Future<String> signIn(String email, String password) async {
       case "wrong-password":
         return 'Wrong Password,\nPlease enter correct password';
       case "user-not-found":
-        return 'User Not Found';
+        return 'User Not Found,\nPlease Sign Up';
     }
     return 'NO';
     // print(e.code);
@@ -66,7 +66,7 @@ class Authmethods {
           name.isNotEmpty &&
           mobileno.toString().length == 10) {
         //register the user
-        // _auth.verifyPhoneNumber(phoneNumber: phoneNumber, verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
+        // _auth.verifyPhoneNumber(phoneNumber: mobileno.toString(), verificationCompleted: (PhoneAuthCredential credential), verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
