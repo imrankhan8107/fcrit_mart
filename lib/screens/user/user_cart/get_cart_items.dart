@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../get_product_details.dart';
@@ -10,6 +11,7 @@ import 'carts_items_cards.dart';
 
 // final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final _razorpay = Razorpay();
 
 class GetCartItems extends StatefulWidget {
   GetCartItems({Key? key}) : super(key: key);
@@ -19,6 +21,72 @@ class GetCartItems extends StatefulWidget {
 }
 
 class _GetCartItemsState extends State<GetCartItems> {
+  String name = '';
+  String email = '';
+  int mobilenumber = 0000000000;
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    Fluttertoast.showToast(
+        msg: 'Order Success');
+    _firestore
+        .collection('order')
+        .doc(productId)
+        .set({
+      'orderId': Uuid().v1(),
+      'checkoutTime': DateTime.now(),
+      'sellerId': ownerId,
+      'buyerId': FirebaseAuth
+          .instance.currentUser!.uid,
+      'productName': productName,
+      'productId': productId,
+      'description': description,
+      'imageUrl': imageUrl,
+      'mrp': mrp,
+      'price': price,
+    });
+
+    _firestore
+        .collection('users')
+        .doc(FirebaseAuth
+        .instance.currentUser?.uid)
+        .collection('Cart')
+        .doc(productId)
+        .delete();
+    _firestore
+        .collection('products')
+        .doc(productId)
+        .delete();
+    Fluttertoast.showToast(msg: 'Payment Success');
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    Fluttertoast.showToast(msg: 'Payment Fail');
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.clear();
+  }
   @override
   Widget build(BuildContext context) {
     String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
@@ -89,31 +157,9 @@ class _GetCartItemsState extends State<GetCartItems> {
                                     vertical: 15.0, horizontal: 30),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // FirebaseMessaging.onMessage.listen((event) {
-                                    //   print('message received');
-                                    //   print('message data : ${event.data}');
-                                    //   if (event.notification != null) {
-                                    //     print(
-                                    //         'Message also contained a notification: ${event.notification}');
-                                    //   }
-                                    // });
-                                    // String? refreshtoken =
-                                    //     await firebaseMessaging.getToken();
-                                    // print(refreshtoken);
-                                    // firebaseMessaging.sendMessage(
-                                    //   to: refreshtoken,
-                                    // );
+
                                     for (var element in cartProducts) {
                                       if (ownerId != currentUserUid) {
-                                        // showDialog(
-                                        //     context: context,
-                                        //     builder: (context) {
-                                        //       return Center(
-                                        //         child:
-                                        //             CircularProgressIndicator(),
-                                        //       );
-                                        //     });
-                                        String _uid = const Uuid().v1();
                                         DocumentSnapshot snapshot =
                                             await _firestore
                                                 .collection('users')
@@ -130,62 +176,23 @@ class _GetCartItemsState extends State<GetCartItems> {
                                         );
 
                                         await FlutterEmailSender.send(email);
-
+                                        var options = {
+                                          'key': 'rzp_test_W8ouhkUI8IPXiQ',
+                                          'amount': '$price' '00',
+                                          'name': '$productName',
+                                          'description':'$description',
+                                          "currency": "INR",
+                                          'prefill': {
+                                            'contact': '+91$mobilenumber',
+                                            'email': '$email'
+                                          }
+                                        };
                                         try {
-                                          Fluttertoast.showToast(
-                                              msg: 'Order Success');
-                                          _firestore
-                                              .collection('order')
-                                              .doc(productId)
-                                              .set({
-                                            'orderId': _uid,
-                                            'checkoutTime': DateTime.now(),
-                                            'sellerId': ownerId,
-                                            'buyerId': FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                            'productName': productName,
-                                            'productId': productId,
-                                            'description': description,
-                                            'imageUrl': imageUrl,
-                                            'mrp': mrp,
-                                            'price': price,
-                                          });
-                                          // if (ownerId ==
-                                          //     FirebaseAuth
-                                          //         .instance.currentUser!.uid) {
-                                          //   showDialog(
-                                          //       context: context,
-                                          //       builder: (context) {
-                                          //         return AlertDialog(
-                                          //           title: const Text(
-                                          //               'Product Checked Out'),
-                                          //           content: Text(
-                                          //               'Your Product $productName has been checked out.\nPlease check Sold items.'),
-                                          //           actions: [
-                                          //             TextButton(
-                                          //               onPressed: () {
-                                          //                 Navigator.of(context)
-                                          //                     .pop();
-                                          //               },
-                                          //               child: const Text('OK'),
-                                          //             )
-                                          //           ],
-                                          //         );
-                                          //       });
-                                          // }
-                                          _firestore
-                                              .collection('users')
-                                              .doc(FirebaseAuth
-                                                  .instance.currentUser?.uid)
-                                              .collection('Cart')
-                                              .doc(productId)
-                                              .delete();
-                                          _firestore
-                                              .collection('products')
-                                              .doc(productId)
-                                              .delete();
+                                          _razorpay.open(options);
+                                          _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+
                                         } catch (e) {
-                                          print(e.toString());
+                                          _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
                                           Fluttertoast.showToast(
                                               msg: 'Order Unsuccessful');
                                         }

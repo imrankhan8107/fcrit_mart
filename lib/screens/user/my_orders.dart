@@ -102,11 +102,10 @@ class _MyOrdersState extends State<MyOrders> {
                                   'key': 'rzp_test_52H71nU7cDRpJa',
                                   'amount': '${item.data()['price']}' '00',
                                   'name': '${item.data()['productName']}',
-                                  'description':
-                                      '${item.data()['description']}',
+                                  'description':'${item.data()['description']}',
                                   "currency": "INR",
                                   'prefill': {
-                                    'contact': '+91${snap['mobileno']}',
+                                    'contact': '+91${['mobileno']}',
                                     'email': '${snap['email']}'
                                   }
                                 };
@@ -122,8 +121,7 @@ class _MyOrdersState extends State<MyOrders> {
                             ),
                             CupertinoDialogAction(
                               onPressed: () {
-                                launch(
-                                    'mailto:${snap['email']}?subject=Your%20Product%20Has%20been%20checked%20out&body=Your%Item%Has%');
+                                launch('mailto:${snap['email']}?subject=Your%20Product%20Has%20been%20checked%20out&body=Your%Item%Has%');
                               },
                               child: Text('EMAIL:  ${snap['email']}'),
                             ),
